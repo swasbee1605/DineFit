@@ -1,7 +1,8 @@
-import { account } from '../appwriteClient';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
+    const { login } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -20,7 +21,7 @@ const Login = () => {
         setIsLoading(true);
         
         try {
-            await account.createEmailSession(formData.email, formData.password);
+            await login(formData.email, formData.password);
             alert('Login successful!');
             setFormData({ email: '', password: '' });
         } catch (error) {

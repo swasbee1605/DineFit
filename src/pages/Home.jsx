@@ -1,15 +1,32 @@
 import React from 'react'
+import { useAuth } from '../contexts/AuthContext'
 
 const Home = () => {
+  const { user, isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
-            Welcome to DineFit!
+            {isAuthenticated ? `Welcome back, ${user.name || user.email}!` : 'Welcome to DineFit!'}
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto">
-            Your one-stop solution for healthy dining and fitness tracking.
+            {isAuthenticated 
+              ? 'Ready to continue your fitness journey?' 
+              : 'Your one-stop solution for healthy dining and fitness tracking.'
+            }
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16">
@@ -39,12 +56,26 @@ const Home = () => {
           </div>
           
           <div className="mt-12 sm:mt-16">
-            <a 
-              href="/signup" 
-              className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg"
-            >
-              Get Started Today
-            </a>
+            {isAuthenticated ? (
+              <div className="space-y-4">
+                <a 
+                  href="/dashboard" 
+                  className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg mr-4"
+                >
+                  Go to Dashboard
+                </a>
+                <p className="text-base text-gray-600">
+                  Welcome back! Start tracking your meals and workouts.
+                </p>
+              </div>
+            ) : (
+              <a 
+                href="/signup" 
+                className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg"
+              >
+                Get Started Today
+              </a>
+            )}
           </div>
         </div>
       </div>

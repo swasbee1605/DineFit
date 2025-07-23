@@ -1,7 +1,8 @@
-import { account } from '../appwriteClient';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Signup = () => {
+    const { signup } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -27,7 +28,7 @@ const Signup = () => {
         setIsLoading(true);
         
         try {
-            await account.create('unique()', formData.email, formData.password);
+            await signup(formData.email, formData.password);
             alert('Signup successful!');
             setFormData({ email: '', password: '', confirmPassword: '' });
         } catch (error) {
