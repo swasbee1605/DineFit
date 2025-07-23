@@ -24,6 +24,7 @@ const Login = () => {
             await login(formData.email, formData.password);
             alert('Login successful!');
             setFormData({ email: '', password: '' });
+            window.location.href = '/dashboard';
         } catch (error) {
             console.error('Login failed:', error);
             alert('Login failed. Please check your credentials.');

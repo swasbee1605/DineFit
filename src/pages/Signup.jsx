@@ -5,6 +5,7 @@ const Signup = () => {
     const { signup } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -28,9 +29,10 @@ const Signup = () => {
         setIsLoading(true);
         
         try {
-            await signup(formData.email, formData.password);
+            await signup(formData.email, formData.password, formData.name);
             alert('Signup successful!');
-            setFormData({ email: '', password: '', confirmPassword: '' });
+            setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+            window.location.href = '/dashboard';
         } catch (error) {
             console.error('Signup failed:', error);
             alert('Signup failed. Please try again.');
@@ -49,6 +51,22 @@ const Signup = () => {
                 
                 <form onSubmit={handleSignup} className="mt-6 sm:mt-8 space-y-4 sm:space-y-6">
                     <div className="space-y-3 sm:space-y-4">
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                                Full Name
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                placeholder="Enter your full name"
+                                required
+                                className="w-full px-3 py-2 sm:px-4 sm:py-3 text-base sm:text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 placeholder-gray-400"
+                            />
+                        </div>
+                        
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                                 Email Address

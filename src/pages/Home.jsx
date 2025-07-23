@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -58,12 +59,12 @@ const Home = () => {
           <div className="mt-12 sm:mt-16">
             {isAuthenticated ? (
               <div className="space-y-4">
-                <a 
-                  href="/dashboard" 
+                <Link 
+                  to="/dashboard" 
                   className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg mr-4"
                 >
                   Go to Dashboard
-                </a>
+                </Link>
                 <p className="text-base text-gray-600">
                   Welcome back! Start tracking your meals and workouts.
                 </p>
