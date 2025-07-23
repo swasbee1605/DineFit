@@ -8,6 +8,7 @@ const Navbar = () => {
     try {
       await logout();
       alert('Logged out successfully!');
+      window.location.href = '/';
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Logout failed. Please try again.');
@@ -30,18 +31,16 @@ const Navbar = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-base sm:text-lg lg:text-xl font-semibold">DineFit</h1>
         <div className="flex space-x-2 sm:space-x-4">
-          <NavLink 
-            to="/" 
-            className="text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
-          >
-            Home
-          </NavLink>
+          
           
           {user ? (
             <>
-              <span className="text-sm sm:text-base px-2 sm:px-3 py-1 bg-green-700 rounded">
+              <span className="text-sm sm:text-base px-2 sm:px-3 py-1 border-2 border-solid border-green-400 rounded">
                 Welcome, {user.name || user.email}
               </span>
+              <NavLink to="/dashboard" className={({isActive}) => isActive ? "bg-green-800 text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200" : "text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"}>
+                Dashboard
+              </NavLink>
               <button 
                 onClick={handleLogout}
                 className="text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
@@ -51,15 +50,21 @@ const Navbar = () => {
             </>
           ) : (
             <>
+            <NavLink 
+                to="/" 
+                className="text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
+            >
+                Home
+            </NavLink>
               <NavLink 
                 to="/login" 
-                className="text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
+                className={({isActive}) => isActive ? "bg-green-800 text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200" : "text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"}
               >
                 Login
               </NavLink>
               <NavLink 
                 to="/signup" 
-                className="text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"
+                className={({isActive}) => isActive ? "bg-green-800 text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200" : "text-sm sm:text-base px-2 sm:px-3 py-1 rounded hover:bg-green-700 transition-colors duration-200"}
               >
                 Signup
               </NavLink>
