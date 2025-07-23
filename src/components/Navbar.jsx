@@ -8,6 +8,12 @@ const Navbar = () => {
       <NavLink to="/" className="ml-4 hover:underline">
         Home
       </NavLink>
+      <NavLink to="/login" className="ml-4 hover:underline">
+        Login
+      </NavLink>
+      <NavLink to="/signup" className="ml-4 hover:underline">
+        Signup
+      </NavLink>
     </nav>
   )
 }
