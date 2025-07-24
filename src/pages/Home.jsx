@@ -7,9 +7,14 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+      <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center relative overflow-hidden">
+        {/* Animated background shapes */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-emerald-200/30 to-teal-200/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        <div className="text-center relative z-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">Loading...</p>
         </div>
       </div>
@@ -17,67 +22,135 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
-            {isAuthenticated ? `Welcome back, ${user.name || user.email}!` : 'Welcome to DineFit!'}
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto">
-            {isAuthenticated 
-              ? 'Ready to continue your fitness journey?' 
-              : 'Your one-stop solution for healthy dining and fitness tracking.'
-            }
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16">
-            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="text-green-600 text-4xl sm:text-5xl mb-4">🥗</div>
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3">Healthy Meals</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Discover nutritious and delicious meal options tailored to your fitness goals.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="text-green-600 text-4xl sm:text-5xl mb-4">📊</div>
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3">Track Progress</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Monitor your nutritional intake and fitness journey with detailed analytics.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 md:col-span-2 lg:col-span-1">
-              <div className="text-green-600 text-4xl sm:text-5xl mb-4">🎯</div>
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3">Achieve Goals</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Set and reach your fitness and nutrition goals with personalized recommendations.
-              </p>
-            </div>
+    <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
+      {/* Dynamic Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100"></div>
+      
+      {/* Abstract Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Large floating orbs */}
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-emerald-200/40 to-teal-300/40 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute top-1/3 -right-32 w-96 h-96 bg-gradient-to-r from-cyan-200/30 to-blue-300/30 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute -bottom-32 left-1/4 w-72 h-72 bg-gradient-to-r from-teal-200/35 to-emerald-300/35 rounded-full blur-3xl animate-float-slow"></div>
+        
+        {/* Geometric shapes */}
+        <div className="absolute top-20 right-20 w-16 h-16 bg-gradient-to-r from-emerald-400 to-teal-500 transform rotate-45 animate-spin-slow opacity-20"></div>
+        <div className="absolute bottom-32 left-16 w-12 h-32 bg-gradient-to-b from-cyan-400 to-blue-500 transform -skew-y-12 animate-sway opacity-25"></div>
+        <div className="absolute top-1/2 left-1/3 w-8 h-8 bg-gradient-to-r from-teal-500 to-emerald-600 rounded-full animate-bounce-slow opacity-30"></div>
+        
+        {/* Dotted pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="grid grid-cols-20 gap-8 p-8">
+            {[...Array(100)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" style={{animationDelay: `${i * 50}ms`}}></div>
+            ))}
           </div>
-          
-          <div className="mt-12 sm:mt-16">
-            {isAuthenticated ? (
-              <div className="space-y-4">
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="text-center">
+          {/* Hero Section with Glass Morphism */}
+          <div className="backdrop-blur-sm bg-white/30 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-2xl border border-white/20 mb-16">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-6 sm:mb-8">
+              {isAuthenticated ? `Welcome back, ${user.name || user.email}!` : 'Welcome to DineFit!'}
+            </h1>
+            <p className="text-xl sm:text-2xl lg:text-3xl text-gray-700 mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed">
+              {isAuthenticated 
+                ? 'Ready to continue your fitness journey?' 
+                : 'Transform your health with AI-powered nutrition tracking and personalized meal planning.'
+              }
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+              {isAuthenticated ? (
                 <Link 
                   to="/dashboard" 
-                  className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg mr-4"
+                  className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl hover:from-emerald-700 hover:to-teal-700 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
                 >
-                  Go to Dashboard
+                  <span className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="relative">Go to Dashboard →</span>
                 </Link>
-                <p className="text-base text-gray-600">
-                  Welcome back! Start tracking your meals and workouts.
+              ) : (
+                <>
+                  <Link 
+                    to="/signup" 
+                    className="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl hover:from-emerald-700 hover:to-teal-700 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="relative">Start Your Journey</span>
+                  </Link>
+                  <Link 
+                    to="/login" 
+                    className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-emerald-700 bg-white/70 backdrop-blur-sm rounded-2xl hover:bg-white/90 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border border-emerald-200"
+                  >
+                    Sign In
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+          
+          {/* Feature Cards with Enhanced Design */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mt-16 sm:mt-20">
+            {/* Card 1 */}
+            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-emerald-200/50 transform hover:-translate-y-2">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/20 to-teal-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🥗</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">Smart Nutrition</h3>
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                  AI-powered meal recommendations tailored to your goals, preferences, and dietary restrictions.
                 </p>
               </div>
-            ) : (
-              <a 
-                href="/signup" 
-                className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold text-lg sm:text-xl px-8 py-3 sm:px-10 sm:py-4 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-lg"
-              >
-                Get Started Today
-              </a>
-            )}
+            </div>
+            
+            {/* Card 2 */}
+            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-teal-200/50 transform hover:-translate-y-2">
+              <div className="absolute inset-0 bg-gradient-to-br from-teal-100/20 to-cyan-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">📊</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Progress Tracking</h3>
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                  Comprehensive analytics and insights to monitor your nutritional intake and fitness journey.
+                </p>
+              </div>
+            </div>
+            
+            {/* Card 3 */}
+            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-cyan-200/50 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/20 to-blue-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🎯</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">Goal Achievement</h3>
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                  Personalized goal setting and achievement tracking with intelligent recommendations and reminders.
+                </p>
+              </div>
+            </div>
           </div>
+          
+          {/* Stats Section */}
+          {!isAuthenticated && (
+            <div className="mt-20 backdrop-blur-sm bg-white/20 rounded-3xl p-8 sm:p-12 border border-white/20">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">10K+</div>
+                  <p className="text-gray-600 text-lg">Happy Users</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-2">50K+</div>
+                  <p className="text-gray-600 text-lg">Meals Tracked</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-2">95%</div>
+                  <p className="text-gray-600 text-lg">Success Rate</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

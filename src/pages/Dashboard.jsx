@@ -30,26 +30,97 @@ const Dashboard = () => {
   const remainingCalories = stats.caloriesGoal - stats.caloriesConsumed;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
+      {/* Dynamic Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100"></div>
+      
+      {/* Abstract Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-emerald-200/20 to-teal-300/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute top-1/3 -right-32 w-96 h-96 bg-gradient-to-r from-cyan-200/15 to-blue-300/15 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute -bottom-32 left-1/4 w-72 h-72 bg-gradient-to-r from-teal-200/20 to-emerald-300/20 rounded-full blur-3xl animate-float-slow"></div>
+        
+        {/* Small geometric accents */}
+        <div className="absolute top-20 right-20 w-8 h-8 bg-gradient-to-r from-emerald-400 to-teal-500 transform rotate-45 animate-spin-slow opacity-10"></div>
+        <div className="absolute bottom-32 left-16 w-6 h-16 bg-gradient-to-b from-cyan-400 to-blue-500 transform -skew-y-12 animate-sway opacity-15"></div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
+        <div className="text-center mb-8 backdrop-blur-sm bg-white/30 rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
             Welcome back, {user?.name || 'User'}! 🍽️
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-2">
+          <p className="text-xl sm:text-2xl text-gray-700 mb-4">
             Track your nutrition and reach your goals
           </p>
-          <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
-            <span>Goal: {stats.mealPlan}</span>
-            <span>•</span>
-            <span>Target: {stats.targetWeight}kg</span>
+          <div className="flex justify-center items-center space-x-6 text-sm text-gray-600 backdrop-blur-sm bg-white/50 rounded-2xl p-4 inline-flex">
+            <span className="flex items-center">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+              Goal: {stats.mealPlan}
+            </span>
+            <span className="flex items-center">
+              <span className="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
+              Target: {stats.targetWeight}kg
+            </span>
             {stats.allergies.length > 0 && (
-              <>
-                <span>•</span>
-                <span>Allergies: {stats.allergies.join(', ')}</span>
-              </>
+              <span className="flex items-center">
+                <span className="w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>
+                Allergies: {stats.allergies.join(', ')}
+              </span>
             )}
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+          {/* Daily Calories Card */}
+          <div className="md:col-span-2 backdrop-blur-sm bg-white/40 p-6 sm:p-8 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Daily Calories</h3>
+              <span className="text-3xl">🔥</span>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-end">
+                <div>
+                  <p className="text-3xl sm:text-4xl font-bold text-gray-800">{stats.caloriesConsumed}</p>
+                  <p className="text-gray-600">of {stats.caloriesGoal} calories</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-emerald-600">{remainingCalories > 0 ? remainingCalories : 0}</p>
+                  <p className="text-sm text-gray-500">remaining</p>
+                </div>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${calculatePercentage(stats.caloriesConsumed, stats.caloriesGoal)}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Current Weight Card */}
+          <div className="backdrop-blur-sm bg-white/40 p-6 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-800">Current Weight</h3>
+              <span className="text-2xl">⚖️</span>
+            </div>
+            <p className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{stats.currentWeight}kg</p>
+            <p className="text-sm text-gray-600 mt-2">Target: {stats.targetWeight}kg</p>
+          </div>
+
+          {/* Progress Card */}
+          <div className="backdrop-blur-sm bg-white/40 p-6 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-800">Progress</h3>
+              <span className="text-2xl">📈</span>
+            </div>
+            <p className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+              {Math.round(calculatePercentage(stats.caloriesConsumed, stats.caloriesGoal))}%
+            </p>
+            <p className="text-sm text-gray-600 mt-2">Daily goal</p>
           </div>
         </div>
 
