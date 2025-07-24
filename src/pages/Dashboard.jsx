@@ -1,16 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { Link } from 'react-router-dom'
+import ProfileSetup from '../components/ProfileSetup'
+import DatabaseStatus from '../components/DatabaseStatus'
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, userProfile, hasProfile } = useAuth();
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
   
+  // Use profile data if available, otherwise default values
   const stats = {
     caloriesConsumed: 1850,
     caloriesGoal: 2200,
-    currentWeight: 75,
-    targetWeight: 70,
-    allergies: ['Nuts', 'Dairy'],
-    mealPlan: 'Weight Loss'
+    currentWeight: userProfile?.currentWeight || 75,
+    targetWeight: userProfile?.targetWeight || 70,
+    allergies: userProfile?.allergies || ['Nuts', 'Dairy'],
+    mealPlan: userProfile?.primaryGoal === 'lose_weight' ? 'Weight Loss' : 
+             userProfile?.primaryGoal === 'gain_weight' ? 'Weight Gain' : 
+             userProfile?.primaryGoal === 'build_muscle' ? 'Muscle Building' : 'General Health'
   };
 
   const recentMeals = [
@@ -49,6 +56,20 @@ const Dashboard = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
         <div className="text-center mb-8 backdrop-blur-sm bg-white/30 rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20">
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex-1"></div>
+            <Link
+              to="/settings"
+              className="p-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200 backdrop-blur-sm bg-white/50 rounded-xl hover:bg-white/70"
+              title="Settings"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </Link>
+          </div>
+          
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
             Welcome back, {user?.name || 'User'}! 🍽️
           </h1>
@@ -72,6 +93,37 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+
+        {/* Database Status Check */}
+        <DatabaseStatus />
+
+        {/* Profile Setup Prompt for New Users */}
+        {!hasProfile && !showProfileSetup && (
+          <div className="mb-8 backdrop-blur-sm bg-gradient-to-r from-emerald-100/50 to-teal-100/50 rounded-3xl p-6 sm:p-8 shadow-xl border border-emerald-200/30">
+            <div className="text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-3">
+                Complete Your Profile 🎯
+              </h2>
+              <p className="text-lg text-gray-700 mb-6">
+                Help us personalize your nutrition plan by sharing your goals, allergies, and preferences. It takes just 2 minutes!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => setShowProfileSetup(true)}
+                  className="px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-2xl hover:from-emerald-700 hover:to-teal-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Set Up My Profile
+                </button>
+                <button
+                  onClick={() => {/* Handle skip */}}
+                  className="px-6 py-4 text-gray-600 bg-white/70 backdrop-blur-sm rounded-2xl hover:bg-white/90 transition-all duration-200 border border-gray-200"
+                >
+                  Maybe Later
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
@@ -243,6 +295,19 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Profile Setup Modal */}
+      {showProfileSetup && (
+        <ProfileSetup
+          isFirstTime={!hasProfile}
+          onComplete={() => {
+            setShowProfileSetup(false);
+          }}
+          onSkip={() => {
+            setShowProfileSetup(false);
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { account } from '../appwriteClient';
+import { account, databases } from '../appwriteClient';
 
 const AuthContext = createContext();
 
@@ -13,6 +13,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [loadingMessage, setLoadingMessage] = useState('Loading DineFit...');
@@ -32,12 +33,17 @@ export const AuthProvider = ({ children }) => {
                 console.log('User session found:', currentUser);
                 setUser(currentUser);
                 setError(null);
+                
+                // Load user profile
+                await getUserProfile(currentUser.$id);
+                
                 clearTimeout(quickTimeout);
                 setLoading(false);
             } catch (error) {
                 console.log('No active session, continuing as guest');
                 // Don't treat this as an error - user just isn't logged in
                 setUser(null);
+                setUserProfile(null);
                 setError(null);
                 clearTimeout(quickTimeout);
                 setLoading(false);
@@ -128,6 +134,10 @@ export const AuthProvider = ({ children }) => {
             
             setUser(currentUser);
             setError(null);
+            
+            // Load user profile after successful login
+            await getUserProfile(currentUser.$id);
+            
             return currentUser;
         } catch (error) {
             console.error('Login error:', error);
@@ -156,11 +166,13 @@ export const AuthProvider = ({ children }) => {
             await account.deleteSession('current');
             console.log('Session deleted successfully');
             setUser(null);
+            setUserProfile(null);
             setError(null);
         } catch (error) {
             console.error('Logout error:', error);
             // Even if logout fails on server, clear local user state
             setUser(null);
+            setUserProfile(null);
             throw error;
         }
     };
@@ -183,14 +195,124 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const getUserProfile = async (userId) => {
+        try {
+            console.log('Attempting to fetch user profile for ID:', userId);
+            const profile = await databases.getDocument(
+                import.meta.env.VITE_APPWRITE_DATABASE_ID || 'dinefit-db',
+                import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID || 'profiles',
+                userId
+            );
+            console.log('Profile found:', profile);
+            setUserProfile(profile);
+            return profile;
+        } catch (error) {
+            console.log('Profile fetch error:', error.message);
+            
+            if (error.message.includes('document_not_found') || error.code === 404) {
+                console.log('No profile found for user, will need to create one');
+            } else if (error.message.includes('database_not_found') || error.message.includes('collection_not_found')) {
+                console.warn('Database or collection not found. Please check Appwrite setup.');
+            } else {
+                console.warn('Unexpected error fetching profile:', error);
+            }
+            
+            setUserProfile(null);
+            return null;
+        }
+    };
+
+    const updateProfile = async (profileData) => {
+        try {
+            if (!user) throw new Error('User not authenticated');
+            
+            console.log('Updating profile for user:', user.$id);
+            console.log('Profile data:', profileData);
+            
+            const profile = {
+                userId: user.$id,
+                ...profileData,
+                updatedAt: new Date().toISOString()
+            };
+
+            let savedProfile;
+            if (userProfile && userProfile.$id) {
+                // Update existing profile
+                console.log('Updating existing profile with ID:', userProfile.$id);
+                savedProfile = await databases.updateDocument(
+                    import.meta.env.VITE_APPWRITE_DATABASE_ID || 'dinefit-db',
+                    import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID || 'profiles',
+                    userProfile.$id,
+                    profile
+                );
+                console.log('Profile updated successfully');
+            } else {
+                // Create new profile
+                console.log('Creating new profile for user');
+                savedProfile = await databases.createDocument(
+                    import.meta.env.VITE_APPWRITE_DATABASE_ID || 'dinefit-db',
+                    import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID || 'profiles',
+                    'unique()',
+                    {
+                        ...profile,
+                        createdAt: new Date().toISOString()
+                    }
+                );
+                console.log('New profile created successfully');
+            }
+            
+            setUserProfile(savedProfile);
+            console.log('Profile saved successfully to database:', savedProfile);
+            return savedProfile;
+        } catch (error) {
+            console.error('Profile update failed:', error);
+            
+            // Provide more specific error messages
+            if (error.message.includes('database_not_found')) {
+                throw new Error('Database not found. Please check the Appwrite database setup.');
+            } else if (error.message.includes('collection_not_found')) {
+                throw new Error('Profile collection not found. Please check the Appwrite collection setup.');
+            } else if (error.message.includes('permission')) {
+                throw new Error('Permission denied. Please check database permissions.');
+            } else if (error.message.includes('document_invalid_structure')) {
+                throw new Error('Invalid profile data structure. Please check the data format.');
+            } else {
+                throw new Error(`Profile update failed: ${error.message}`);
+            }
+        }
+    };
+
+    const deleteProfile = async () => {
+        try {
+            if (!userProfile) return;
+            
+            await databases.deleteDocument(
+                import.meta.env.VITE_APPWRITE_DATABASE_ID || 'dinefit-db',
+                import.meta.env.VITE_APPWRITE_PROFILE_COLLECTION_ID || 'profiles',
+                userProfile.$id
+            );
+            
+            setUserProfile(null);
+            console.log('Profile deleted successfully');
+        } catch (error) {
+            console.error('Profile deletion failed:', error);
+            throw error;
+        }
+    };
+
     const value = {
         user,
+        userProfile,
         login,
         logout,
         signup,
+        updateProfile,
+        getUserProfile,
+        deleteProfile,
         loading,
         error,
-        isAuthenticated: !!user
+        isAuthenticated: !!user,
+        hasProfile: !!userProfile
     };
 
     if (loading) {

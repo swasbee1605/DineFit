@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Settings from './pages/Settings'
 import './index.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/signup" element={ <Signup /> } />
             <Route path="/login" element={ <Login /> } />
             <Route path="/dashboard" element={ <Dashboard /> } />
+            <Route path="/settings" element={ <Settings /> } />
             <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
           </Routes>
         </main>
