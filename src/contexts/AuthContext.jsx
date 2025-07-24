@@ -18,6 +18,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         checkUserSession();
+        
+        // Fallback timeout in case Appwrite hangs
+        const timeout = setTimeout(() => {
+            console.log('Auth check timeout - setting loading to false');
+            setLoading(false);
+        }, 10000); // 10 second timeout
+        
+        return () => clearTimeout(timeout);
     }, []);
 
     const checkUserSession = async () => {
@@ -33,26 +41,41 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setError(null); // Don't set this as an error, it's normal
         } finally {
+            console.log('Setting loading to false');
             setLoading(false);
         }
     };
 
     const login = async (email, password) => {
         try {
-            await account.createEmailPasswordSession(email, password);
+            // Create a persistent email session
+            const session = await account.createEmailPasswordSession(email, password);
+            console.log('Session created:', session);
+            
+            // Get the current user after successful login
             const currentUser = await account.get();
+            console.log('Login successful, user:', currentUser);
+            
             setUser(currentUser);
+            setError(null);
             return currentUser;
         } catch (error) {
+            console.error('Login error:', error);
             throw error;
         }
     };
 
     const logout = async () => {
         try {
+            // Delete the current session
             await account.deleteSession('current');
+            console.log('Session deleted successfully');
             setUser(null);
+            setError(null);
         } catch (error) {
+            console.error('Logout error:', error);
+            // Even if logout fails on server, clear local user state
+            setUser(null);
             throw error;
         }
     };
@@ -62,11 +85,15 @@ export const AuthProvider = ({ children }) => {
             // Ensure name is a valid string and at least 1 character
             const validName = name && name.trim() ? name.trim() : 'User';
             
+            console.log('Creating user account...');
             // Create the user account
-            await account.create('unique()', email, password, validName);
-            // Automatically log them in after signup
+            const user = await account.create('unique()', email, password, validName);
+            console.log('User account created:', user);
+            
+            // Automatically log them in after signup to create a session
             await login(email, password);
         } catch (error) {
+            console.error('Signup error:', error);
             throw error;
         }
     };

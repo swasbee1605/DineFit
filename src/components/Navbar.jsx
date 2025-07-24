@@ -8,7 +8,8 @@ const Navbar = () => {
     try {
       await logout();
       alert('Logged out successfully!');
-      window.location.href = '/';
+      // The user state will be automatically updated by the context
+      // No need for manual redirect since React Router will handle it
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Logout failed. Please try again.');
