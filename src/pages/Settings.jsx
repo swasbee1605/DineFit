@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
-
 const Settings = () => {
     const { user, userProfile, updateProfile, logout } = useAuth();
     const [activeTab, setActiveTab] = useState('profile');
     const [isLoading, setIsLoading] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
     const handleQuickUpdate = async (field, value) => {
         setIsLoading(true);
         try {
@@ -20,8 +18,6 @@ const Settings = () => {
             console.log(`Successfully updated ${field}`);
         } catch (error) {
             console.error('Quick update failed:', error);
-            
-            // Show user-friendly error message
             if (error.message.includes('Database not found') || error.message.includes('Collection not found')) {
                 alert('Database setup required. Please contact support.');
             } else {
@@ -31,28 +27,24 @@ const Settings = () => {
             setIsLoading(false);
         }
     };
-
     const tabs = [
         { id: 'profile', label: 'Profile', icon: '👤' },
         { id: 'health', label: 'Food Preferences', icon: '�️' },
         { id: 'preferences', label: 'Cooking', icon: '👨‍🍳' },
         { id: 'account', label: 'Account', icon: '🔒' }
     ];
-
     return (
         <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
-            {/* Dynamic Gradient Background */}
+            
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100"></div>
             
-            {/* Abstract Floating Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-emerald-200/20 to-teal-300/20 rounded-full blur-3xl animate-float"></div>
                 <div className="absolute top-1/3 -right-32 w-96 h-96 bg-gradient-to-r from-cyan-200/15 to-blue-300/15 rounded-full blur-3xl animate-float-delayed"></div>
             </div>
-
-            {/* Main Content */}
+            
             <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                {/* Header */}
+                
                 <div className="text-center mb-8 backdrop-blur-sm bg-white/30 rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20">
                     <div className="flex items-center justify-between mb-4">
                         <Link 
@@ -70,8 +62,7 @@ const Settings = () => {
                     </div>
                     <p className="text-gray-600">Manage your profile and preferences</p>
                 </div>
-
-                {/* Tab Navigation */}
+                
                 <div className="mb-8">
                     <div className="backdrop-blur-sm bg-white/40 rounded-2xl p-2 shadow-lg border border-white/30">
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
@@ -92,13 +83,11 @@ const Settings = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Tab Content */}
+                
                 <div className="backdrop-blur-sm bg-white/40 rounded-3xl p-6 sm:p-8 shadow-xl border border-white/30">
                     {activeTab === 'profile' && (
                         <div className="space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Basic Information</h2>
-                            
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
@@ -112,7 +101,6 @@ const Settings = () => {
                                         placeholder="25"
                                     />
                                 </div>
-
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                                     <select
@@ -129,11 +117,9 @@ const Settings = () => {
                             </div>
                         </div>
                     )}
-
                     {activeTab === 'health' && (
                         <div className="space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Food Preferences & Restrictions</h2>
-                            
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Food Allergies & Intolerances</h3>
                                 <div className="mb-4">
@@ -146,7 +132,6 @@ const Settings = () => {
                                     />
                                 </div>
                             </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Foods You Dislike</h3>
                                 <div className="mb-4">
@@ -159,7 +144,6 @@ const Settings = () => {
                                     />
                                 </div>
                             </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Dietary Preferences</h3>
                                 <div className="mb-4">
@@ -172,7 +156,6 @@ const Settings = () => {
                                     />
                                 </div>
                             </div>
-
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Favorite Cuisines</h3>
                                 <div className="mb-4">
@@ -187,11 +170,9 @@ const Settings = () => {
                             </div>
                         </div>
                     )}
-
                     {activeTab === 'preferences' && (
                         <div className="space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Cooking Preferences</h2>
-                            
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Meals per Day</label>
@@ -207,7 +188,6 @@ const Settings = () => {
                                         <option value="6">6+ meals</option>
                                     </select>
                                 </div>
-
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Cooking Time Preference</label>
                                     <select
@@ -225,11 +205,9 @@ const Settings = () => {
                             </div>
                         </div>
                     )}
-
                     {activeTab === 'account' && (
                         <div className="space-y-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Account Settings</h2>
-                            
                             <div className="space-y-4">
                                 <div className="bg-gray-50/70 backdrop-blur-sm rounded-xl p-4">
                                     <h3 className="font-semibold text-gray-800 mb-2">Account Information</h3>
@@ -237,7 +215,6 @@ const Settings = () => {
                                     <p className="text-gray-600">Name: {user?.name}</p>
                                     <p className="text-gray-600">Member since: {new Date(user?.$createdAt).toLocaleDateString()}</p>
                                 </div>
-
                                 <div className="flex flex-col sm:flex-row gap-4">
                                     <button
                                         onClick={() => logout()}
@@ -257,8 +234,7 @@ const Settings = () => {
                     )}
                 </div>
             </div>
-
-            {/* Delete Confirmation Modal */}
+            
             {showDeleteConfirm && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl p-6 max-w-md w-full">
@@ -275,7 +251,6 @@ const Settings = () => {
                             </button>
                             <button
                                 onClick={() => {
-                                    // Handle account deletion
                                     setShowDeleteConfirm(false);
                                 }}
                                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -289,5 +264,4 @@ const Settings = () => {
         </div>
     );
 };
-
 export default Settings;

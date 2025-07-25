@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
+import { useNavigate } from 'react-router-dom';
 const Signup = () => {
-    const { signup } = useAuth();
+    const { signup, user } = useAuth();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
@@ -12,33 +13,34 @@ const Signup = () => {
         confirmPassword: ''
     });
 
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
+
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-
     const handleSignup = async (event) => {
         event.preventDefault();
         setError('');
-        
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match!');
             return;
         }
-
         if (formData.password.length < 8) {
             setError('Password must be at least 8 characters long');
             return;
         }
-
         setIsLoading(true);
-        
         try {
             await signup(formData.email, formData.password, formData.name);
             console.log('Signup successful, redirecting...');
-            window.location.href = '/dashboard';
+            navigate('/dashboard');
         } catch (error) {
             console.error('Signup failed:', error);
             setError(error.message || 'Signup failed. Please try again.');
@@ -46,24 +48,20 @@ const Signup = () => {
             setIsLoading(false);
         }
     };
-
     return (
         <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
-            {/* Dynamic Gradient Background */}
+            
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100"></div>
             
-            {/* Abstract Floating Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-emerald-200/30 to-teal-300/30 rounded-full blur-3xl animate-float"></div>
                 <div className="absolute top-1/3 -right-32 w-96 h-96 bg-gradient-to-r from-cyan-200/25 to-blue-300/25 rounded-full blur-3xl animate-float-delayed"></div>
                 <div className="absolute -bottom-32 left-1/4 w-72 h-72 bg-gradient-to-r from-teal-200/30 to-emerald-300/30 rounded-full blur-3xl animate-float-slow"></div>
                 
-                {/* Geometric shapes */}
                 <div className="absolute top-20 right-20 w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 transform rotate-45 animate-spin-slow opacity-15"></div>
                 <div className="absolute bottom-32 left-16 w-8 h-24 bg-gradient-to-b from-cyan-400 to-blue-500 transform -skew-y-12 animate-sway opacity-20"></div>
             </div>
-
-            {/* Main Content */}
+            
             <div className="relative z-10 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
                 <div className="w-full max-w-md backdrop-blur-sm bg-white/40 p-8 sm:p-10 lg:p-12 rounded-3xl shadow-2xl border border-white/30">
                     <div className="text-center mb-8">
@@ -72,14 +70,12 @@ const Signup = () => {
                         </h1>
                         <p className="text-lg sm:text-xl text-gray-600">Start your personalized fitness journey today</p>
                     </div>
-                    
                     <form onSubmit={handleSignup} className="space-y-6">
                         {error && (
                             <div className="p-4 bg-red-100/80 backdrop-blur-sm border border-red-300 text-red-700 rounded-2xl">
                                 <p className="text-sm font-medium">{error}</p>
                             </div>
                         )}
-                        
                         <div className="space-y-5">
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -96,7 +92,6 @@ const Signup = () => {
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
                             </div>
-                            
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                     Email Address
@@ -112,7 +107,6 @@ const Signup = () => {
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
                             </div>
-                            
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                     Password
@@ -128,7 +122,6 @@ const Signup = () => {
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
                             </div>
-                            
                             <div>
                                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                     Confirm Password
@@ -145,7 +138,6 @@ const Signup = () => {
                                 />
                             </div>
                         </div>
-
                         <button 
                             type="submit" 
                             disabled={isLoading}
@@ -167,7 +159,6 @@ const Signup = () => {
                             </span>
                         </button>
                     </form>
-
                     <div className="text-center mt-6">
                         <p className="text-gray-600">
                             Already have an account?{' '}
@@ -181,5 +172,4 @@ const Signup = () => {
         </div>
     );
 };
-
 export default Signup

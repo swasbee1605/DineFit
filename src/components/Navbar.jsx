@@ -1,23 +1,16 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-
 const Navbar = () => {
   const { user, logout, loading } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-
   const handleLogout = async () => {
     try {
       await logout();
-      alert('Logged out successfully!');
-      // The user state will be automatically updated by the context
-      // No need for manual redirect since React Router will handle it
     } catch (error) {
       console.error('Logout failed:', error);
-      alert('Logout failed. Please try again.');
     }
   };
-
   if (loading) {
     return (
       <nav className={`sticky top-0 z-50 px-4 sm:px-6 py-3 sm:py-4 shadow-md transition-all duration-300 ${
@@ -32,7 +25,6 @@ const Navbar = () => {
       </nav>
     );
   }
-
   return (
     <nav className={`sticky top-0 z-50 px-4 sm:px-6 py-3 sm:py-4 shadow-md transition-all duration-300 ${
       isHomePage 
@@ -113,5 +105,4 @@ const Navbar = () => {
     </nav>
   )
 }
-
 export default Navbar

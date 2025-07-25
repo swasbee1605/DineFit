@@ -1,79 +1,87 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
+import { useNavigate } from 'react-router-dom';
+import { forceLogout } from '../utils/sessionUtils';
 const Login = () => {
-    const { login } = useAuth();
+    const { login, user } = useAuth();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [isOnline, setIsOnline] = useState(navigator.onLine);
+    const [showSessionConflict, setShowSessionConflict] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-    // Monitor network status
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
+
     useEffect(() => {
         const handleOnline = () => setIsOnline(true);
         const handleOffline = () => setIsOnline(false);
-        
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
-        
         return () => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
-
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
-
     const handleLogin = async (event) => {
         event.preventDefault();
-        
-        // Check network connectivity first
         if (!isOnline) {
             setError('No internet connection. Please check your network and try again.');
             return;
         }
-        
         setIsLoading(true);
         setError('');
-        
         try {
             await login(formData.email, formData.password);
-            // Success - redirect will happen automatically via React Router
             console.log('Login successful, redirecting...');
-            window.location.href = '/dashboard';
+            navigate('/dashboard');
         } catch (error) {
             console.error('Login failed:', error);
-            setError(error.message || 'Login failed. Please try again.');
+            if (error.message.includes('session already exists') || error.message.includes('session') && error.code === 401) {
+                setShowSessionConflict(true);
+                setError('Session conflict detected. Please clear your session and try again.');
+            } else {
+                setError(error.message || 'Login failed. Please try again.');
+            }
         } finally {
             setIsLoading(false);
         }
     };
-
+    const handleClearSession = async () => {
+        setIsLoading(true);
+        try {
+            await forceLogout();
+        } catch (error) {
+            console.log('Force logout completed');
+        }
+    };
     return (
         <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
-            {/* Dynamic Gradient Background */}
+            
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100"></div>
             
-            {/* Abstract Floating Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-emerald-200/30 to-teal-300/30 rounded-full blur-3xl animate-float"></div>
                 <div className="absolute top-1/2 -right-32 w-96 h-96 bg-gradient-to-r from-cyan-200/25 to-blue-300/25 rounded-full blur-3xl animate-float-delayed"></div>
                 <div className="absolute -bottom-32 left-1/3 w-72 h-72 bg-gradient-to-r from-teal-200/30 to-emerald-300/30 rounded-full blur-3xl animate-float-slow"></div>
                 
-                {/* Geometric shapes */}
                 <div className="absolute top-20 right-20 w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 transform rotate-45 animate-spin-slow opacity-15"></div>
                 <div className="absolute bottom-32 left-16 w-8 h-24 bg-gradient-to-b from-cyan-400 to-blue-500 transform -skew-y-12 animate-sway opacity-20"></div>
             </div>
-
-            {/* Main Content */}
+            
             <div className="relative z-10 flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
                 <div className="w-full max-w-md backdrop-blur-sm bg-white/40 p-8 sm:p-10 lg:p-12 rounded-3xl shadow-2xl border border-white/30">
                     <div className="text-center mb-8">
@@ -82,7 +90,6 @@ const Login = () => {
                         </h1>
                         <p className="text-lg sm:text-xl text-gray-600">Sign in to continue your fitness journey</p>
                         
-                        {/* Network Status Indicator */}
                         {!isOnline && (
                             <div className="mt-4 p-3 bg-orange-100/80 backdrop-blur-sm border border-orange-300 text-orange-700 rounded-xl">
                                 <div className="flex items-center justify-center">
@@ -92,14 +99,22 @@ const Login = () => {
                             </div>
                         )}
                     </div>
-                    
                     <form onSubmit={handleLogin} className="space-y-6">
                         {error && (
                             <div className="p-4 bg-red-100/80 backdrop-blur-sm border border-red-300 text-red-700 rounded-2xl">
                                 <p className="text-sm font-medium">{error}</p>
+                                {showSessionConflict && (
+                                    <button
+                                        type="button"
+                                        onClick={handleClearSession}
+                                        className="mt-3 w-full px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors duration-200 text-sm font-medium"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? 'Clearing Session...' : 'Clear Session & Retry'}
+                                    </button>
+                                )}
                             </div>
                         )}
-                        
                         <div className="space-y-5">
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -116,7 +131,6 @@ const Login = () => {
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
                             </div>
-                            
                             <div>
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                     Password
@@ -133,7 +147,6 @@ const Login = () => {
                                 />
                             </div>
                         </div>
-
                         <button 
                             type="submit" 
                             disabled={isLoading}
@@ -155,7 +168,6 @@ const Login = () => {
                             </span>
                         </button>
                     </form>
-
                     <div className="text-center mt-6">
                         <p className="text-gray-600">
                             Don't have an account?{' '}
@@ -169,5 +181,4 @@ const Login = () => {
         </div>
     );
 };
-
 export default Login

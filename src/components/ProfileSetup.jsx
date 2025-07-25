@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
 const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
     const { user, userProfile, updateProfile } = useAuth();
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
-        // Basic Info
         age: '',
         gender: '',
-        
-        // Food Preferences & Restrictions
         allergies: '',
         dietaryPreferences: '',
         dislikedFoods: '',
         favoriteCuisines: '',
-        
-        // Meal Preferences
         mealsPerDay: '3',
         cookingTime: ''
     });
-
-    // Pre-populate form with existing profile data if available
     useEffect(() => {
         if (userProfile) {
             console.log('Loading existing profile data:', userProfile);
@@ -37,40 +29,33 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             });
         }
     }, [userProfile]);
-
     const cuisineOptions = [
         'Italian', 'Mexican', 'Chinese', 'Indian', 'Thai', 'Japanese',
         'Mediterranean', 'American', 'French', 'Korean', 'Middle Eastern', 'Other'
     ];
-
     const dietaryOptions = [
         'Vegetarian', 'Vegan', 'Pescatarian', 'Keto', 'Paleo',
         'Gluten-Free', 'Dairy-Free', 'Low Carb', 'High Protein', 'Halal', 'Kosher'
     ];
-
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
             ...prev,
             [field]: value
         }));
     };
-
     const handleArrayToggle = (field, value) => {
         const currentValues = formData[field] ? formData[field].split(', ').filter(v => v.trim()) : [];
         let newValues;
-        
         if (currentValues.includes(value)) {
             newValues = currentValues.filter(item => item !== value);
         } else {
             newValues = [...currentValues, value];
         }
-        
         setFormData(prev => ({
             ...prev,
             [field]: newValues.join(', ')
         }));
     };
-
     const handleNext = () => {
         if (currentStep < 3) {
             setCurrentStep(prev => prev + 1);
@@ -78,32 +63,27 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             handleSubmit();
         }
     };
-
     const handleBack = () => {
         if (currentStep > 1) {
             setCurrentStep(prev => prev - 1);
         }
     };
-
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
             console.log('Saving profile data to Appwrite database:', formData);
-            
-            // Add timestamp
             const profileDataWithTimestamp = {
                 ...formData,
+                age: formData.age ? parseInt(formData.age, 10) : null, // Convert age to integer
                 createdAt: userProfile?.createdAt || new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
-            
+            console.log('Processed profile data:', profileDataWithTimestamp);
             await updateProfile(profileDataWithTimestamp);
             console.log('Profile saved successfully to database');
             onComplete && onComplete();
         } catch (error) {
             console.error('Profile update failed:', error);
-            
-            // Show user-friendly error message
             if (error.message.includes('Database not found') || error.message.includes('Collection not found')) {
                 alert('Database setup required. Please contact support or check your configuration.');
             } else if (error.message.includes('permission')) {
@@ -115,7 +95,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             setIsLoading(false);
         }
     };
-
     const isStepValid = () => {
         switch (currentStep) {
             case 1:
@@ -128,7 +107,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                 return false;
         }
     };
-
     const renderStep1 = () => (
         <div className="space-y-6">
             <div className="text-center mb-8">
@@ -137,7 +115,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                 </h2>
                 <p className="text-gray-600">Just a few details to personalize your recipes</p>
             </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
@@ -151,7 +128,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                         placeholder="Enter your age"
                     />
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                     <select
@@ -168,7 +144,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             </div>
         </div>
     );
-
     const renderStep2 = () => (
         <div className="space-y-6">
             <div className="text-center mb-8">
@@ -177,7 +152,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                 </h2>
                 <p className="text-gray-600">Help us recommend the perfect recipes for you</p>
             </div>
-
             <div className="space-y-6">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Food Allergies & Intolerances</label>
@@ -190,7 +164,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                     />
                     <p className="text-xs text-gray-500 mt-1">Separate multiple items with commas</p>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-4">Dietary Preferences</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -209,7 +182,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                         ))}
                     </div>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Foods You Dislike</label>
                     <textarea
@@ -221,7 +193,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                     />
                     <p className="text-xs text-gray-500 mt-1">Separate multiple items with commas</p>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-4">Favorite Cuisines</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -243,7 +214,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             </div>
         </div>
     );
-
     const renderStep3 = () => (
         <div className="space-y-6">
             <div className="text-center mb-8">
@@ -252,7 +222,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                 </h2>
                 <p className="text-gray-600">Tell us about your cooking style and preferences</p>
             </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Meals per Day</label>
@@ -268,7 +237,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                         <option value="6">6+ meals</option>
                     </select>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Cooking Time Preference</label>
                     <select
@@ -286,12 +254,11 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
             </div>
         </div>
     );
-
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border border-white/30 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                 <div className="p-6 sm:p-8 lg:p-10">
-                    {/* Progress Bar */}
+                    
                     <div className="mb-8">
                         <div className="flex justify-between text-sm text-gray-600 mb-2">
                             <span>Step {currentStep} of 3</span>
@@ -304,13 +271,11 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                             ></div>
                         </div>
                     </div>
-
-                    {/* Step Content */}
+                    
                     {currentStep === 1 && renderStep1()}
                     {currentStep === 2 && renderStep2()}
                     {currentStep === 3 && renderStep3()}
-
-                    {/* Navigation Buttons */}
+                    
                     <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
                         <div className="flex gap-3">
                             {currentStep > 1 && (
@@ -330,7 +295,6 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
                                 </button>
                             )}
                         </div>
-
                         <button
                             onClick={handleNext}
                             disabled={!isStepValid() || isLoading}
@@ -353,5 +317,4 @@ const ProfileSetup = ({ isFirstTime = false, onComplete, onSkip }) => {
         </div>
     );
 };
-
 export default ProfileSetup;
