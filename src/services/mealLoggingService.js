@@ -1,12 +1,21 @@
+import { userRecipeService } from './userRecipeService.js';
+
 class MealLoggingService {
   constructor() {
     this.storageKey = 'dinefit_meal_logs';
     this.favoritesKey = 'dinefit_favorites';
     this.maxRecentMeals = 10;
+    this.currentUser = null;
   }
+
+  setCurrentUser(user) {
+    this.currentUser = user;
+  }
+
   getCurrentTimestamp() {
     return new Date().toISOString();
   }
+
   formatTime(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', {
@@ -15,6 +24,7 @@ class MealLoggingService {
       hour12: true
     });
   }
+
   formatDate(timestamp) {
     const date = new Date(timestamp);
     const today = new Date();
@@ -31,7 +41,21 @@ class MealLoggingService {
       });
     }
   }
-  logMeal(recipe, mealType = 'Unknown') {
+
+  async logMeal(recipe, mealType = 'Unknown') {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.logMeal(this.currentUser.$id, recipe, mealType);
+      } catch (error) {
+        console.error('Database meal logging failed, falling back to localStorage:', error);
+        return this.logMealToLocalStorage(recipe, mealType);
+      }
+    } else {
+      return this.logMealToLocalStorage(recipe, mealType);
+    }
+  }
+
+  logMealToLocalStorage(recipe, mealType = 'Unknown') {
     try {
       const mealLog = {
         id: Date.now() + Math.random(),
@@ -46,7 +70,7 @@ class MealLoggingService {
         cookingTime: recipe.cookingTime || recipe.readyInMinutes || 'Unknown',
         source: recipe.source || 'spoonacular'
       };
-      const existingLogs = this.getMealLogs();
+      const existingLogs = this.getMealLogsFromLocalStorage();
       const updatedLogs = [mealLog, ...existingLogs];
       const trimmedLogs = updatedLogs.slice(0, this.maxRecentMeals);
       localStorage.setItem(this.storageKey, JSON.stringify(trimmedLogs));
@@ -57,7 +81,21 @@ class MealLoggingService {
       return null;
     }
   }
-  getMealLogs() {
+
+  async getMealLogs() {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.getMealLogs(this.currentUser.$id);
+      } catch (error) {
+        console.error('Database meal logs failed, falling back to localStorage:', error);
+        return this.getMealLogsFromLocalStorage();
+      }
+    } else {
+      return this.getMealLogsFromLocalStorage();
+    }
+  }
+
+  getMealLogsFromLocalStorage() {
     try {
       const logs = localStorage.getItem(this.storageKey);
       return logs ? JSON.parse(logs) : [];
@@ -66,8 +104,9 @@ class MealLoggingService {
       return [];
     }
   }
-  getRecentMeals(limit = 10) {
-    const logs = this.getMealLogs();
+
+  async getRecentMeals(limit = 10) {
+    const logs = await this.getMealLogs();
     return logs.slice(0, limit).map(log => ({
       ...log,
       time: this.formatTime(log.timestamp),
@@ -75,17 +114,42 @@ class MealLoggingService {
       displayTime: `${this.formatDate(log.timestamp)} at ${this.formatTime(log.timestamp)}`
     }));
   }
-  clearMealLogs() {
-    localStorage.removeItem(this.storageKey);
+
+  async clearMealLogs() {
+    if (this.currentUser) {
+      try {
+        await userRecipeService.clearMealLogs(this.currentUser.$id);
+      } catch (error) {
+        console.error('Database clear failed, clearing localStorage:', error);
+        localStorage.removeItem(this.storageKey);
+      }
+    } else {
+      localStorage.removeItem(this.storageKey);
+    }
     console.log('🗑️ All meal logs cleared');
   }
+
   extractIngredientsText(recipe) {
     if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
       return recipe.ingredients.slice(0, 3).map(ing => ing.name || ing.original || ing).join(', ');
     }
     return recipe.category || 'Various ingredients';
   }
-  addToFavorites(recipe) {
+
+  async addToFavorites(recipe) {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.addToFavorites(this.currentUser.$id, recipe);
+      } catch (error) {
+        console.error('Database favorites failed, falling back to localStorage:', error);
+        return this.addToFavoritesLocalStorage(recipe);
+      }
+    } else {
+      return this.addToFavoritesLocalStorage(recipe);
+    }
+  }
+
+  addToFavoritesLocalStorage(recipe) {
     try {
       const favorite = {
         id: recipe.id,
@@ -98,7 +162,7 @@ class MealLoggingService {
         source: recipe.source || 'spoonacular',
         recipeData: recipe
       };
-      const favorites = this.getFavorites();
+      const favorites = this.getFavoritesFromLocalStorage();
       if (favorites.some(fav => fav.id === recipe.id)) {
         console.log(`⭐ Recipe already in favorites: ${recipe.name}`);
         return favorite;
@@ -112,9 +176,23 @@ class MealLoggingService {
       return null;
     }
   }
-  removeFromFavorites(recipeId) {
+
+  async removeFromFavorites(recipeId) {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.removeFromFavorites(this.currentUser.$id, recipeId);
+      } catch (error) {
+        console.error('Database remove favorites failed, falling back to localStorage:', error);
+        return this.removeFromFavoritesLocalStorage(recipeId);
+      }
+    } else {
+      return this.removeFromFavoritesLocalStorage(recipeId);
+    }
+  }
+
+  removeFromFavoritesLocalStorage(recipeId) {
     try {
-      const favorites = this.getFavorites();
+      const favorites = this.getFavoritesFromLocalStorage();
       const updatedFavorites = favorites.filter(fav => fav.id !== recipeId);
       localStorage.setItem(this.favoritesKey, JSON.stringify(updatedFavorites));
       console.log(`💔 Removed from favorites: ${recipeId}`);
@@ -124,11 +202,39 @@ class MealLoggingService {
       return false;
     }
   }
-  isFavorited(recipeId) {
-    const favorites = this.getFavorites();
+
+  async isFavorited(recipeId) {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.isFavorited(this.currentUser.$id, recipeId);
+      } catch (error) {
+        console.error('Database favorites check failed, falling back to localStorage:', error);
+        return this.isFavoritedLocalStorage(recipeId);
+      }
+    } else {
+      return this.isFavoritedLocalStorage(recipeId);
+    }
+  }
+
+  isFavoritedLocalStorage(recipeId) {
+    const favorites = this.getFavoritesFromLocalStorage();
     return favorites.some(fav => fav.id === recipeId);
   }
-  getFavorites() {
+
+  async getFavorites() {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.getFavorites(this.currentUser.$id);
+      } catch (error) {
+        console.error('Database get favorites failed, falling back to localStorage:', error);
+        return this.getFavoritesFromLocalStorage();
+      }
+    } else {
+      return this.getFavoritesFromLocalStorage();
+    }
+  }
+
+  getFavoritesFromLocalStorage() {
     try {
       const favorites = localStorage.getItem(this.favoritesKey);
       return favorites ? JSON.parse(favorites) : [];
@@ -137,23 +243,51 @@ class MealLoggingService {
       return [];
     }
   }
-  toggleFavorite(recipe) {
-    const isCurrentlyFavorited = this.isFavorited(recipe.id);
+
+  async toggleFavorite(recipe) {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.toggleFavorite(this.currentUser.$id, recipe);
+      } catch (error) {
+        console.error('Database toggle favorite failed, falling back to localStorage:', error);
+        return this.toggleFavoriteLocalStorage(recipe);
+      }
+    } else {
+      return this.toggleFavoriteLocalStorage(recipe);
+    }
+  }
+
+  toggleFavoriteLocalStorage(recipe) {
+    const isCurrentlyFavorited = this.isFavoritedLocalStorage(recipe.id);
     if (isCurrentlyFavorited) {
-      this.removeFromFavorites(recipe.id);
+      this.removeFromFavoritesLocalStorage(recipe.id);
       return false;
     } else {
-      this.addToFavorites(recipe);
+      this.addToFavoritesLocalStorage(recipe);
       return true;
     }
   }
-  getStats() {
-    const logs = this.getMealLogs();
-    const favorites = this.getFavorites();
+
+  async getStats() {
+    if (this.currentUser) {
+      try {
+        return await userRecipeService.getStats(this.currentUser.$id);
+      } catch (error) {
+        console.error('Database stats failed, falling back to localStorage:', error);
+        return this.getStatsFromLocalStorage();
+      }
+    } else {
+      return this.getStatsFromLocalStorage();
+    }
+  }
+
+  getStatsFromLocalStorage() {
+    const logs = this.getMealLogsFromLocalStorage();
+    const favorites = this.getFavoritesFromLocalStorage();
     const mealsByType = logs.reduce((acc, log) => {
       acc[log.type] = (acc[log.type] || 0) + 1;
       return acc;
-    }, );
+    }, {});
     const today = new Date().toDateString();
     const todayMeals = logs.filter(log => 
       new Date(log.timestamp).toDateString() === today
@@ -166,6 +300,7 @@ class MealLoggingService {
       lastMealTime: logs.length > 0 ? logs[0].timestamp : null
     };
   }
+
   suggestMealType() {
     const hour = new Date().getHours();
     if (hour >= 6 && hour < 11) return 'Breakfast';
@@ -174,6 +309,30 @@ class MealLoggingService {
     if (hour >= 19 || hour < 6) return 'Dinner';
     return 'Snack';
   }
+
+  // Migration helper
+  async migrateUserData() {
+    if (this.currentUser) {
+      try {
+        console.log('🔄 Starting migration from localStorage to database for user:', this.currentUser.email);
+        const migrationResult = await userRecipeService.migrateLocalStorageToDatabase(this.currentUser.$id);
+        console.log('✅ Migration completed:', migrationResult);
+        return migrationResult;
+      } catch (error) {
+        console.error('❌ Migration failed:', error);
+        throw error;
+      }
+    }
+  }
+
+  async clearLocalStorageData() {
+    try {
+      await userRecipeService.clearLocalStorage();
+    } catch (error) {
+      console.error('Error clearing localStorage:', error);
+    }
+  }
 }
+
 export const mealLoggingService = new MealLoggingService();
 export default mealLoggingService;

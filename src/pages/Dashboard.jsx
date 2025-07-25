@@ -2,29 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'
 import ProfileSetup from '../components/ProfileSetup'
-import DatabaseStatus from '../components/DatabaseStatus'
 import { mealLoggingService } from '../services/mealLoggingService'
+
 const Dashboard = () => {
   const { user, userProfile, hasProfile } = useAuth();
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [recentMeals, setRecentMeals] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [mealStats, setMealStats] = useState();
+
   useEffect(() => {
     loadMealData();
   }, []);
-  const loadMealData = () => {
-    const meals = mealLoggingService.getRecentMeals(10);
-    const favs = mealLoggingService.getFavorites();
-    const stats = mealLoggingService.getStats();
+
+  const loadMealData = async () => {
+    const meals = await mealLoggingService.getRecentMeals(10);
+    const favs = await mealLoggingService.getFavorites();
+    const stats = await mealLoggingService.getStats();
     setRecentMeals(meals);
     setFavorites(favs);
     setMealStats(stats);
   };
-  const handleClearMeals = () => {
+
+  const handleClearMeals = async () => {
     if (window.confirm('Are you sure you want to clear all meal logs?')) {
-      mealLoggingService.clearMealLogs();
-      loadMealData();
+      await mealLoggingService.clearMealLogs();
+      await loadMealData();
     }
   };
   const userPreferences = {
@@ -87,8 +90,6 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-        
-        <DatabaseStatus />
         
         {!hasProfile && !showProfileSetup && (
           <div className="mb-8 backdrop-blur-sm bg-gradient-to-r from-emerald-100/50 to-teal-100/50 rounded-3xl p-6 sm:p-8 shadow-xl border border-emerald-200/30">

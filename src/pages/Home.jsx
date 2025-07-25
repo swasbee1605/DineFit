@@ -90,10 +90,10 @@ const Home = () => {
             <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-emerald-200/50 transform hover:-translate-y-2">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/20 to-teal-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🥗</div>
-                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">Smart Nutrition</h3>
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">👨‍🍳</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">Personal Recipes</h3>
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                  AI-powered meal recommendations tailored to your goals, preferences, and dietary restrictions.
+                  Discover recipes tailored to your personal taste preferences and cooking style.
                 </p>
               </div>
             </div>
@@ -101,10 +101,10 @@ const Home = () => {
             <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-teal-200/50 transform hover:-translate-y-2">
               <div className="absolute inset-0 bg-gradient-to-br from-teal-100/20 to-cyan-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">📊</div>
-                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Progress Tracking</h3>
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">�</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Smart Discovery</h3>
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                  Comprehensive analytics and insights to monitor your nutritional intake and fitness journey.
+                  Find new recipes that match your flavor preferences and dietary requirements.
                 </p>
               </div>
             </div>
@@ -112,33 +112,14 @@ const Home = () => {
             <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-cyan-200/50 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/20 to-blue-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🎯</div>
-                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">Goal Achievement</h3>
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">❤️</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">Recipe Favorites</h3>
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                  Personalized goal setting and achievement tracking with intelligent recommendations and reminders.
+                  Save and organize recipes you love, creating your personalized collection.
                 </p>
               </div>
             </div>
           </div>
-          
-          {!isAuthenticated && (
-            <div className="mt-20 backdrop-blur-sm bg-white/20 rounded-3xl p-8 sm:p-12 border border-white/20">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                <div className="text-center">
-                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">10K+</div>
-                  <p className="text-gray-600 text-lg">Happy Users</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-2">50K+</div>
-                  <p className="text-gray-600 text-lg">Meals Tracked</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-2">95%</div>
-                  <p className="text-gray-600 text-lg">Success Rate</p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

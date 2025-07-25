@@ -8,7 +8,6 @@ class AdvancedRecipeService {
     this.apiKeys = this.loadApiKeys();
     this.currentKeyIndex = 0;
     this.initializeQuotas();
-    console.log(`🔑 Loaded ${this.apiKeys.length} API keys for rotation`);
   }
   loadApiKeys() {
     const keys = [];
@@ -32,7 +31,9 @@ class AdvancedRecipeService {
       console.warn('Add VITE_SPOONACULAR_API_KEYS to your .env file');
       return ['DEMO_KEY_FALLBACK']; // Will use fallback recipes
     }
-    console.log(`🔑 Loaded ${keys.length} Spoonacular API key(s)`);
+    if (import.meta.env.DEV && keys.length > 0) {
+      console.log(`🔑 Loaded ${keys.length} Spoonacular API key(s)`);
+    }
     return keys;
   }
   initializeQuotas() {

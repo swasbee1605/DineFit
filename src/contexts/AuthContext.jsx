@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account, databases } from '../appwriteClient';
 import { Query } from 'appwrite';
+import { mealLoggingService } from '../services/mealLoggingService';
+
 const AuthContext = createContext();
 export const useAuth = () => {
     const context = useContext(AuthContext);
@@ -25,8 +27,11 @@ export const AuthProvider = ({ children }) => {
             }, 5000); // Increased timeout to allow for profile loading
             try {
                 const currentUser = await account.get();
-                console.log('User session found:', currentUser);
+                if (import.meta.env.DEV) {
+                    console.log('User session found:', currentUser);
+                }
                 setUser(currentUser);
+                mealLoggingService.setCurrentUser(currentUser);
                 setError(null);
                 try {
                     await getUserProfile(currentUser.$id);
@@ -63,6 +68,7 @@ export const AuthProvider = ({ children }) => {
             const currentUser = await Promise.race([sessionPromise, timeoutPromise]);
             console.log('User found:', currentUser);
             setUser(currentUser);
+            mealLoggingService.setCurrentUser(currentUser);
             setError(null);
         } catch (error) {
             console.log('No user session found or timeout occurred:', error.message);
@@ -112,8 +118,23 @@ export const AuthProvider = ({ children }) => {
             const currentUser = await Promise.race([userPromise, userTimeoutPromise]);
             console.log('Login successful, user:', currentUser);
             setUser(currentUser);
+            mealLoggingService.setCurrentUser(currentUser);
             setError(null);
             await getUserProfile(currentUser.$id);
+            
+            // Check if user has localStorage data to migrate
+            try {
+                const hasLocalData = localStorage.getItem('dinefit_meal_logs') || localStorage.getItem('dinefit_favorites');
+                if (hasLocalData) {
+                    console.log('🔄 Local data detected, starting migration...');
+                    await mealLoggingService.migrateUserData();
+                    console.log('✅ Migration completed, clearing local storage...');
+                    await mealLoggingService.clearLocalStorageData();
+                }
+            } catch (migrationError) {
+                console.warn('Migration failed but continuing with login:', migrationError);
+            }
+            
             return currentUser;
         } catch (error) {
             console.error('Login error:', error);
@@ -138,12 +159,14 @@ export const AuthProvider = ({ children }) => {
             await account.deleteSession('current');
             console.log('Session deleted successfully');
             setUser(null);
+            mealLoggingService.setCurrentUser(null);
             setUserProfile(null);
             setError(null);
             navigate('/');
         } catch (error) {
             console.error('Logout error:', error);
             setUser(null);
+            mealLoggingService.setCurrentUser(null);
             setUserProfile(null);
             navigate('/');
             throw error;

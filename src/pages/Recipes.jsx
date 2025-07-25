@@ -65,6 +65,40 @@ const filterByDietaryPreferences = (recipes, dietaryPreferences) => {
     return true;
   });
 };
+
+const filterByCuisinePreferences = (recipes, favoriteCuisines) => {
+  if (!favoriteCuisines || favoriteCuisines === 'None specified') return recipes;
+  const cuisines = favoriteCuisines.toLowerCase().split(',').map(c => c.trim());
+  if (import.meta.env.DEV) {
+    console.log('🍛 Filtering recipes by favorite cuisines:', cuisines);
+  }
+  
+  const filtered = recipes.filter(recipe => {
+    const recipeName = recipe.name.toLowerCase();
+    const recipeCategory = recipe.category?.toLowerCase() || '';
+    const recipeCuisines = recipe.cuisines?.map(c => c.toLowerCase()) || [];
+    const recipeArea = recipe.area?.toLowerCase() || '';
+    
+    // Check if any of the user's favorite cuisines match the recipe
+    const matches = cuisines.some(cuisine => {
+      return recipeName.includes(cuisine) || 
+             recipeCategory.includes(cuisine) ||
+             recipeArea.includes(cuisine) ||
+             recipeCuisines.some(recipeCuisine => recipeCuisine.includes(cuisine));
+    });
+    
+    if (matches && import.meta.env.DEV) {
+      console.log(`✅ Recipe "${recipe.name}" matches cuisine preference`);
+    }
+    
+    return matches;
+  });
+  
+  if (import.meta.env.DEV) {
+    console.log(`🎯 Filtered ${recipes.length} recipes down to ${filtered.length} based on cuisine preferences`);
+  }
+  return filtered;
+};
 const Recipes = () => {
   const { userProfile } = useAuth();
   const [recipes, setRecipes] = useState([]);
@@ -74,7 +108,6 @@ const Recipes = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
   const [showQuotaStatus, setShowQuotaStatus] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
   useEffect(() => {
     loadInitialData();
     if (import.meta.env.DEV) {
@@ -124,31 +157,6 @@ const Recipes = () => {
       setLoading(false);
     }
   };
-  const handleCategoryChange = async (category) => {
-    setSelectedCategory(category);
-    if (category === 'all') {
-      loadInitialData();
-      return;
-    }
-    setLoading(true);
-    try {
-      let categoryRecipes = await advancedRecipeService.getByCategory(category);
-      if (userProfile?.allergies) {
-        categoryRecipes = filterByAllergies(categoryRecipes, userProfile.allergies);
-      }
-      if (userProfile?.dislikedFoods) {
-        categoryRecipes = filterByDislikedFoods(categoryRecipes, userProfile.dislikedFoods);
-      }
-      if (userProfile?.dietaryPreferences) {
-        categoryRecipes = filterByDietaryPreferences(categoryRecipes, userProfile.dietaryPreferences);
-      }
-      setRecipes(categoryRecipes);
-    } catch (error) {
-      console.error('Error loading category recipes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const handleRecipeClick = (recipe) => {
     setSelectedRecipe(recipe);
     setShowModal(true);
@@ -161,7 +169,6 @@ const Recipes = () => {
     try {
       const randomRecipes = await advancedRecipeService.getRandomRecipes(12);
       setRecipes(randomRecipes);
-      setSelectedCategory('all');
       setSearchTerm('');
     } catch (error) {
       console.error('Error loading random recipes:', error);
@@ -225,32 +232,6 @@ const Recipes = () => {
               🎲 Random
             </button>
           </div>
-          
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => handleCategoryChange('all')}
-              className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
-                selectedCategory === 'all'
-                  ? 'bg-emerald-500 text-white'
-                  : 'bg-white/70 text-gray-600 hover:bg-white/90'
-              }`}
-            >
-              All Recipes
-            </button>
-            {['Vegetarian', 'Seafood', 'Chicken', 'Beef', 'Dessert', 'Breakfast'].map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
-                  selectedCategory === category
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-white/70 text-gray-600 hover:bg-white/90'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </div>
         
         {userProfile && (
@@ -264,7 +245,13 @@ const Recipes = () => {
                 <span>Cuisines: {userProfile.favoriteCuisines}</span>
               )}
               {userProfile.cookingTime && userProfile.cookingTime !== 'Not set' && (
-                <span>Time: {userProfile.cookingTime}</span>
+                <span>Time: {
+                  userProfile.cookingTime === 'quick' ? 'Quick & Easy (≤15 min)' :
+                  userProfile.cookingTime === 'moderate' ? 'Moderate (15-45 min)' :
+                  userProfile.cookingTime === 'elaborate' ? 'Take Your Time (45+ min)' :
+                  userProfile.cookingTime === 'no_cooking' ? 'Minimal/No Cooking' :
+                  userProfile.cookingTime
+                }</span>
               )}
               {userProfile.allergies && userProfile.allergies !== 'None specified' && (
                 <span>Avoiding: {userProfile.allergies}</span>
