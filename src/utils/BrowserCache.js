@@ -10,8 +10,8 @@ class BrowserCache {
       vsize: 0
     };
     this.options = {
-      stdTTL: options.stdTTL || 600, // 10 minutes default
-      checkperiod: options.checkperiod || 120, // 2 minutes cleanup interval
+      stdTTL: options.stdTTL || 600, 
+      checkperiod: options.checkperiod || 120, 
       useClones: options.useClones !== false,
       deleteOnExpire: options.deleteOnExpire !== false,
       enableLegacyCallbacks: options.enableLegacyCallbacks !== false,
