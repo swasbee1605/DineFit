@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
 import Recipes from './pages/Recipes'
+import Favorites from './pages/Favorites'
 import './index.css'
 function App() {
   console.log('App component rendering...');
@@ -33,6 +34,11 @@ function App() {
             <Route path="/recipes" element={ 
               <ProtectedRoute>
                 <Recipes /> 
+              </ProtectedRoute>
+            } />
+            <Route path="/favorites" element={ 
+              <ProtectedRoute>
+                <Favorites /> 
               </ProtectedRoute>
             } />
             <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
