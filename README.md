@@ -2,7 +2,7 @@
 
 **Personalized recipe discovery platform**
 
-DineFit is a smart, user-friendly web application designed to help individuals discover recipes that align with their unique dietary preferences, allergies, and food dislikes. The platform empowers users to create personalized profiles and instantly receive intelligent recipe recommendations sourced from trusted APIs with advanced filtering capabilities.
+DineFit is a smart, user-friendly web application designed to help individuals discover recipes that align with their unique diet preferences. The platform empowers users to receive real, cookable recipe suggestions sourced from trusted online databases, based on their preferences, likes and dislikes! Don't know what to cook? Let DineFit decide!
 
 ![DineFit Dashboard](https://img.shields.io/badge/Status-Production%20Ready-green)
 ![React](https://img.shields.io/badge/React-19+-blue)
