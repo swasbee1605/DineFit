@@ -2,8 +2,8 @@ import BrowserCache from '../utils/BrowserCache.js';
 class AdvancedRecipeService {
   constructor() {
     this.memoryCache = new BrowserCache({ 
-      stdTTL: 3600, // 1 hour
-      checkperiod: 600 // Check for expired keys every 10 minutes
+      stdTTL: 3600,
+      checkperiod: 600 
     });
     this.apiKeys = this.loadApiKeys();
     this.currentKeyIndex = 0;
@@ -29,7 +29,7 @@ class AdvancedRecipeService {
     if (keys.length === 0) {
       console.warn('⚠️ No API keys found in environment variables');
       console.warn('Add VITE_SPOONACULAR_API_KEYS to your .env file');
-      return ['DEMO_KEY_FALLBACK']; // Will use fallback recipes
+      return ['DEMO_KEY_FALLBACK']; 
     }
     if (import.meta.env.DEV && keys.length > 0) {
       console.log(`🔑 Loaded ${keys.length} Spoonacular API key(s)`);
@@ -46,7 +46,7 @@ class AdvancedRecipeService {
       } else {
         this.quotas[keyId] = {
           used: 0,
-          limit: 150, // Free tier limit
+          limit: 150,
           resetTime: this.getNextResetTime()
         };
       }
@@ -98,7 +98,7 @@ class AdvancedRecipeService {
         };
       }
     }
-    return null; // No keys available
+    return null; 
   }
   useApiQuota(keyId) {
     if (this.quotas[keyId]) {
@@ -117,10 +117,14 @@ class AdvancedRecipeService {
     try {
       const memoryResult = this.memoryCache.get(cacheKey);
       if (memoryResult) {
-        console.log('🚀 Cache HIT (memory):', cacheKey);
+        if (import.meta.env.DEV) {
+          console.log('🚀 Cache HIT (memory):', cacheKey);
+        }
         return memoryResult;
       }
-      console.log('❌ Cache MISS:', cacheKey);
+      if (import.meta.env.DEV) {
+        console.log('❌ Cache MISS:', cacheKey);
+      }
       return null;
     } catch (error) {
       console.warn('Cache get error:', error);
@@ -130,7 +134,9 @@ class AdvancedRecipeService {
   async setCache(cacheKey, data, ttl = 3600) {
     try {
       this.memoryCache.set(cacheKey, data, ttl);
-      console.log('💾 Cached:', cacheKey);
+      if (import.meta.env.DEV) {
+        console.log('💾 Cached:', cacheKey);
+      }
     } catch (error) {
       console.warn('Cache set error:', error);
     }
@@ -143,29 +149,64 @@ class AdvancedRecipeService {
     return hasAllergies || hasDietary || hasDislikes;
   }
   async makeSpoonacularRequest(endpoint, params) {
-    const availableKey = this.getAvailableApiKey();
-    if (!availableKey) {
-      throw new Error('No API quota available. All keys exhausted for today.');
-    }
-    const url = new URL(`https://api.spoonacular.com/recipes/${endpoint}`);
-    url.searchParams.append('apiKey', availableKey.key);
-    Object.keys(params).forEach(key => {
-      if (params[key] !== undefined && params[key] !== null) {
-        url.searchParams.append(key, params[key]);
+    let lastError = null;
+    
+    for (let attempt = 0; attempt < this.apiKeys.length; attempt++) {
+      const availableKey = this.getAvailableApiKey();
+      if (!availableKey) {
+        throw new Error('No API quota available. All keys exhausted for today.');
       }
-    });
-    console.log(`🔑 Using API key ${availableKey.keyId} (${availableKey.remaining} requests remaining)`);
-    const response = await fetch(url.toString());
-    if (!response.ok) {
-      if (response.status === 402) {
-        this.quotas[availableKey.keyId].used = this.quotas[availableKey.keyId].limit;
-        this.saveQuotasToStorage();
-        throw new Error(`API quota exceeded for ${availableKey.keyId}`);
+
+      const url = new URL(`https://api.spoonacular.com/recipes/${endpoint}`);
+      url.searchParams.append('apiKey', availableKey.key);
+      Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+          url.searchParams.append(key, params[key]);
+        }
+      });
+
+      if (import.meta.env.DEV) {
+        console.log(`🔑 Using API key ${availableKey.keyId} (${availableKey.remaining} requests remaining)`);
       }
-      throw new Error(`API request failed: ${response.status}`);
+
+      try {
+        const response = await fetch(url.toString());
+        
+        if (response.ok) {
+          this.useApiQuota(availableKey.keyId);
+          return await response.json();
+        }
+        
+        if (response.status === 402 || response.status === 429) {
+          this.quotas[availableKey.keyId].used = this.quotas[availableKey.keyId].limit;
+          this.saveQuotasToStorage();
+          
+          if (import.meta.env.DEV) {
+            console.warn(`⚠️ API key ${availableKey.keyId} exhausted (${response.status}), trying next key...`);
+          }
+          
+          lastError = new Error(`API key ${availableKey.keyId} quota exceeded`);
+          continue; 
+        }
+        
+        lastError = new Error(`API request failed: ${response.status}`);
+        throw lastError;
+        
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.warn(`❌ API key ${availableKey.keyId} failed:`, error.message);
+        }
+        
+        lastError = error;
+        if (error.name === 'TypeError' || error.message.includes('fetch')) {
+          continue;
+        }
+        throw error;
+      }
     }
-    this.useApiQuota(availableKey.keyId);
-    return await response.json();
+    
+    // All keys failed
+    throw lastError || new Error('All API keys failed');
   }
   async getPersonalizedRecipes(userProfile) {
     try {
@@ -181,11 +222,15 @@ class AdvancedRecipeService {
       if (cached) {
         return cached;
       }
-      console.log('🔍 Fetching fresh personalized recipes...');
+      if (import.meta.env.DEV) {
+        console.log('🔍 Fetching fresh personalized recipes...');
+      }
       if (!this.needsAdvancedFiltering(userProfile)) {
-        console.log('📱 Using TheMealDB (no restrictions)');
+        if (import.meta.env.DEV) {
+          console.log('📱 Using TheMealDB (no restrictions)');
+        }
         const recipes = await this.getTheMealDBRecipes(userProfile);
-        await this.setCache(cacheKey, recipes, 7200); // Cache for 2 hours
+        await this.setCache(cacheKey, recipes, 7200); 
         return recipes;
       }
       const params = {
