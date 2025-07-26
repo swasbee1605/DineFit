@@ -87,22 +87,7 @@ export const AuthProvider = ({ children }) => {
             console.log('Starting login process...');
             console.log('Using endpoint:', import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1');
             setError(null);
-            try {
-                console.log('Testing connection to Appwrite...');
-                const healthCheck = fetch('https://cloud.appwrite.io/v1/health', {
-                    method: 'GET',
-                    timeout: 3000
-                });
-                const timeoutCheck = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Network timeout')), 3000)
-                );
-                const response = await Promise.race([healthCheck, timeoutCheck]);
-                console.log('Health check response status:', response.status);
-                console.log('Network connectivity confirmed');
-            } catch (healthError) {
-                console.warn('Network check failed:', healthError);
-                throw new Error('Unable to connect to server. Please check your internet connection and try again.');
-            }
+            // Network connectivity will be tested during the actual login attempt
             console.log('Attempting to create session...');
             const loginPromise = account.createEmailPasswordSession(email, password);
             const timeoutPromise = new Promise((_, reject) => {
