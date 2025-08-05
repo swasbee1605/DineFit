@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { validatePassword } from '../utils/validation';
+import PasswordStrength from '../components/PasswordStrength';
 const Signup = () => {
     const { signup, user } = useAuth();
     const navigate = useNavigate();
@@ -28,14 +30,19 @@ const Signup = () => {
     const handleSignup = async (event) => {
         event.preventDefault();
         setError('');
+        
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match!');
             return;
         }
-        if (formData.password.length < 8) {
-            setError('Password must be at least 8 characters long');
+        
+        // Use comprehensive password validation
+        const passwordValidation = validatePassword(formData.password);
+        if (!passwordValidation.isValid) {
+            setError(passwordValidation.message);
             return;
         }
+        
         setIsLoading(true);
         try {
             await signup(formData.email, formData.password, formData.name);
@@ -121,6 +128,11 @@ const Signup = () => {
                                     required
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
+                                {formData.password && (
+                                    <div className="mt-2">
+                                        <PasswordStrength password={formData.password} />
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { account, databases } from '../appwriteClient';
 import { Query } from 'appwrite';
 import { mealLoggingService } from '../services/mealLoggingService';
+import { validatePassword } from '../utils/validation';
 
 const AuthContext = createContext();
 export const useAuth = () => {
@@ -128,14 +129,14 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Connection is slow or unavailable. Please check your internet and try again.');
             } else if (error.message.includes('Unable to connect')) {
                 throw new Error(error.message);
-            } else if (error.message.includes('Invalid credentials') || error.message.includes('invalid_credentials')) {
-                throw new Error('Invalid email or password. Please check your credentials.');
+            } else if (error.message.includes('Invalid credentials') || error.message.includes('invalid_credentials') || error.message.includes('Invalid `password` param') || error.message.includes('password') || error.message.includes('email')) {
+                throw new Error('Incorrect email or password');
             } else if (error.message.includes('user_invalid')) {
-                throw new Error('Invalid email or password. Please check your credentials.');
+                throw new Error('Incorrect email or password');
             } else if (error.message.includes('rate_limit')) {
                 throw new Error('Too many login attempts. Please wait a moment and try again.');
             } else {
-                throw new Error(`Login failed: ${error.message || 'Unknown error'}`);
+                throw new Error('Incorrect email or password');
             }
         }
     };
@@ -159,8 +160,18 @@ export const AuthProvider = ({ children }) => {
     };
     const signup = async (email, password, name = '') => {
         try {
+            // Validate password strength before creating account
+            console.log('Validating password strength...');
+            const passwordValidation = validatePassword(password);
+            console.log('Password validation result:', passwordValidation);
+            
+            if (!passwordValidation.isValid) {
+                console.log('Password validation failed:', passwordValidation.message);
+                throw new Error(passwordValidation.message);
+            }
+            
             const validName = name && name.trim() ? name.trim() : 'User';
-            console.log('Creating user account...');
+            console.log('Creating user account with validated password...');
             const user = await account.create('unique()', email, password, validName);
             console.log('User account created:', user);
             await login(email, password);
