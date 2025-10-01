@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { validatePassword } from '../utils/validation';
+import { Eye, EyeOff } from 'lucide-react'; 
+
 import PasswordStrength from '../components/PasswordStrength';
 const Signup = () => {
     const { signup, user } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword1, setShowPassword1] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -118,8 +122,9 @@ const Signup = () => {
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                     Password
                                 </label>
+                                <div className='relative'>
                                 <input
-                                    type="password"
+                                     type={showPassword1 ? "text" : "password"}
                                     name="password"
                                     id="password"
                                     value={formData.password}
@@ -128,6 +133,14 @@ const Signup = () => {
                                     required
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
+                                <button
+                                        type="button"
+                                        onClick={() => setShowPassword1(!showPassword1)}
+                                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showPassword1 ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                                 {formData.password && (
                                     <div className="mt-2">
                                         <PasswordStrength password={formData.password} />
@@ -138,8 +151,9 @@ const Signup = () => {
                                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                     Confirm Password
                                 </label>
+                                <div className='relative'>
                                 <input
-                                    type="password"
+                                     type={showPassword2 ? "text" : "password"}
                                     name="confirmPassword"
                                     id="confirmPassword"
                                     value={formData.confirmPassword}
@@ -148,6 +162,14 @@ const Signup = () => {
                                     required
                                     className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
                                 />
+                                <button
+                                        type="button"
+                                        onClick={() => setShowPassword2(!showPassword2)}
+                                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showPassword2 ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <button 
