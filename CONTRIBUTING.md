@@ -27,7 +27,7 @@ Your help makes this project better for everyone.
     ### Appwrite Setup
     
     1.  **Sign up / Log in** at [Appwrite](https://appwrite.io/) and create a new project.
-    2.  **Create a database and collections** as defined in the project (e.g., `profiles` collection, etc.).
+    2.  **Create a database and collections** as defined in [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md).
     3.  **Copy your project ID and endpoint.**
     4.  **Copy your database and collection IDs.**
     
