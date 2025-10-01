@@ -7,12 +7,20 @@ import { mealLoggingService } from '../services/mealLoggingService'
 const Dashboard = () => {
   const { user, userProfile, hasProfile } = useAuth();
   const [showProfileSetup, setShowProfileSetup] = useState(false);
+  const [firstTimeProfile, setfirstTimeProfile] = useState(false);
   const [recentMeals, setRecentMeals] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [mealStats, setMealStats] = useState();
 
   useEffect(() => {
     loadMealData();
+    const skippedProfile = localStorage.getItem('skippedProfileSetup');
+    if (hasProfile) {
+      setfirstTimeProfile(false); 
+    } else if (skippedProfile === 'true') {
+      setfirstTimeProfile(true); 
+    }
+
   }, []);
 
   const loadMealData = async () => {
@@ -91,7 +99,7 @@ const Dashboard = () => {
           </div>
         </div>
         
-        {!hasProfile && !showProfileSetup && (
+        {!hasProfile && !showProfileSetup && !firstTimeProfile && (
           <div className="mb-8 backdrop-blur-sm bg-gradient-to-r from-emerald-100/50 to-teal-100/50 rounded-3xl p-6 sm:p-8 shadow-xl border border-emerald-200/30">
             <div className="text-center">
               <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-3">
@@ -108,7 +116,9 @@ const Dashboard = () => {
                   Set Up My Profile
                 </button>
                 <button
-                  onClick={() => setShowProfileSetup(false)}
+                  onClick={() => {  setShowProfileSetup(false);
+                                    setfirstTimeProfile(true);
+                                    localStorage.setItem('skippedProfileSetup', 'true');}}
                   className="px-6 py-4 text-gray-600 bg-white/70 backdrop-blur-sm rounded-2xl hover:bg-white/90 transition-all duration-200 border border-gray-200"
                 >
                   Maybe Later
