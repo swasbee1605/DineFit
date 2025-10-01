@@ -116,47 +116,10 @@ Set appropriate permissions based on your security requirements:
 
 ---
 
-## Setup Instructions for Contributors
-
-### Method 1: Manual Setup (Detailed)
-
-1. **Create a new Appwrite project** at [cloud.appwrite.io](https://cloud.appwrite.io)
-
-2. **Create the database**:
-   - Go to Databases → Create Database
-   - Database ID: `dinefit-db`
-
-3. **Create each collection** following the tables above:
-   - Click "Add Collection"
-   - Set the Collection ID exactly as specified
-   - Add all attributes with the correct types and constraints
-   - Configure permissions as specified
-
-4. **Update your `.env` file** with your credentials
-
-### Method 2: Using Appwrite CLI (Recommended)
-
-```bash
-# Install Appwrite CLI
-npm install -g appwrite-cli
-
-# Login to your Appwrite account
-appwrite login
-
-# Deploy the schema (if appwrite.json is provided)
-appwrite deploy collection
-```
-
----
-
 ## Notes
 
 - All string fields should use UTF-8 encoding
-- DateTime fields are stored in ISO 8601 format
-- Arrays/lists in string fields should be stored as comma-separated values or JSON strings
-- Ensure proper indexing on `userId` fields for query performance
 - Consider adding indexes on frequently queried fields like `recipeId` and `timestamp`
-
 ---
 
 ## Environment Variables
