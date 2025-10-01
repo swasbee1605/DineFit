@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { forceLogout } from '../utils/sessionUtils';
 const Login = () => {
-    const { login, user } = useAuth();
+    const { login, guestLogin, user } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -66,6 +66,20 @@ const Login = () => {
             await forceLogout();
         } catch (error) {
             console.log('Force logout completed');
+        }
+    };
+
+    const handleGuestLogin = async () => {
+        setIsLoading(true);
+        setError('');
+        try {
+            await guestLogin();
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Guest login failed:', error);
+            setError(error.message || 'Guest login failed. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
     return (
@@ -168,6 +182,39 @@ const Login = () => {
                             </span>
                         </button>
                     </form>
+                    
+                     
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300/50"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-4 bg-white/40 backdrop-blur-sm text-gray-500 rounded-xl">or</span>
+                        </div>
+                    </div>
+                    
+                    
+                    <button
+                        type="button"
+                        onClick={handleGuestLogin}
+                        disabled={isLoading}
+                        className="group relative w-full inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 bg-white/70 backdrop-blur-sm border-2 border-gray-300/50 rounded-2xl hover:bg-white/90 hover:border-gray-400/50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:transform-none"
+                    >
+                        <span className="relative flex items-center">
+                            <svg className="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            {isLoading ? 'Starting Guest Session...' : 'Continue as Guest'}
+                        </span>
+                    </button>
+                    
+                    
+                    <div className="mt-4 p-3 bg-blue-50/80 backdrop-blur-sm border border-blue-200/50 text-blue-700 rounded-xl">
+                        <p className="text-sm text-center">
+                            <span className="font-medium">Guest Mode:</span> Try DineFit without creating an account. 
+                        </p>
+                    </div>
+                    
                     <div className="text-center mt-6">
                         <p className="text-gray-600">
                             Don't have an account?{' '}
