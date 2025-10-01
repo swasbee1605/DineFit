@@ -10,7 +10,6 @@ try {
     .setEndpoint(endpoint) 
     .setProject(projectId);
 
-  // Silent connection test in development only
   if (import.meta.env.DEV) {
     const testConnection = async () => {
       try {
@@ -21,7 +20,6 @@ try {
         );
         await Promise.race([connectionTest, timeout]);
       } catch (error) {
-        // Silent - connection test for dev only
       }
     };
     testConnection();
