@@ -1,3 +1,6 @@
+## 🎃 Hacktoberfest 2025
+This repository is participating in **Hacktoberfest 2025**!  
+
 # 🍽️ DineFit
 
 **Personalized recipe discovery platform**
@@ -29,38 +32,26 @@ DineFit is a smart, user-friendly web application designed to help individuals d
 - [x] Meal logging interface
 - [x] Basic nutrition tracking
 - [x] Weight goal management
+- [x] Recipe API integration
 
 ### 🚧 **In Progress**
-- [ ] Recipe API integration
-- [ ] Advanced filtering options
 - [ ] Meal planning features
-- [ ] Data export functionality
 
 ### 📋 **Planned Features**
 - [ ] Social sharing capabilities
 - [ ] Weekly meal planning
 - [ ] Grocery list generation
 - [ ] Progress analytics and insights
-- [ ] Mobile app (React Native)
 
 ## 🤝 Contributing
 
 We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-### Development Guidelines
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Contributing Guidelines
+We welcome contributions — whether it’s bug fixes, documentation, or new features.  
+Check out [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
 
 ## 📄 License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
-
-**Krishna Sarathi**
-- GitHub: [@imkrishnasarathi](https://github.com/imkrishnasarathi)
-- Project: [DineFit](https://github.com/imkrishnasarathi/DineFit)
 
