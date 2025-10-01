@@ -14,7 +14,6 @@ html, body {
   min-height: 100vh;
 }
 
-/* Custom animations for homepage */
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
@@ -105,12 +104,10 @@ html, body {
   animation: bounce-slow 4s ease-in-out infinite;
 }
 
-/* Grid for dotted pattern */
 .grid-cols-20 {
   grid-template-columns: repeat(20, minmax(0, 1fr));
 }
 
-/* Custom scrollbar styles */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -120,7 +117,6 @@ html, body {
   display: none;
 }
 
-/* Custom scrollbar for better UX */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
