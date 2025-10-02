@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { forceLogout } from '../utils/sessionUtils';
+import { Eye, EyeOff } from 'lucide-react'; 
+
 const Login = () => {
     const { login, guestLogin, user } = useAuth();
     const navigate = useNavigate();
@@ -9,6 +11,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [isOnline, setIsOnline] = useState(navigator.onLine);
     const [showSessionConflict, setShowSessionConflict] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -149,16 +152,25 @@ const Login = () => {
                                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                     Password
                                 </label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter your password"
-                                    required
-                                    className="w-full px-4 py-3 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
-                                />
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"} // toggle type
+                                        name="password"
+                                        id="password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter your password"
+                                        required
+                                        className="w-full px-4 py-3 pr-12 text-lg bg-white/70 backdrop-blur-sm border border-white/30 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-lg"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <button 
