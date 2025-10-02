@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  font-family: 'Roboto', sans-serif;
+html,
+body {
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -14,8 +15,16 @@ html, body {
   min-height: 100vh;
 }
 
+@layer base {
+  input:focus,
+  textarea:focus,
+  select:focus {
+    @apply outline-none;
+  }
+}
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
@@ -30,7 +39,8 @@ html, body {
 }
 
 @keyframes float-delayed {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
@@ -45,7 +55,8 @@ html, body {
 }
 
 @keyframes float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) scale(1);
   }
   50% {
@@ -63,7 +74,8 @@ html, body {
 }
 
 @keyframes sway {
-  0%, 100% {
+  0%,
+  100% {
     transform: skewY(-12deg) translateX(0px);
   }
   50% {
@@ -72,7 +84,8 @@ html, body {
 }
 
 @keyframes bounce-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
