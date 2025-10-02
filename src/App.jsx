@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Signup from './pages/Signup'
@@ -20,34 +21,43 @@ function App() {
         <Navbar />
         <main>
           <Routes>
+
             <Route path="/" element={ <Home /> } />
             <Route path="/signup" element={ <Signup /> } />
             <Route path="/login" element={ <Login /> } />
             <Route path="/success" element={ <Success /> } />
             <Route path="/failure" element={ <Failure /> } />
             <Route path="/dashboard" element={ 
+
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={
+
               <ProtectedRoute>
-                <Dashboard /> 
+                <Dashboard />
               </ProtectedRoute>
             } />
-            <Route path="/settings" element={ 
+            <Route path="/settings" element={
               <ProtectedRoute>
-                <Settings /> 
+                <Settings />
               </ProtectedRoute>
             } />
-            <Route path="/recipes" element={ 
+            <Route path="/recipes" element={
               <ProtectedRoute>
-                <Recipes /> 
+                <Recipes />
               </ProtectedRoute>
             } />
-            <Route path="/favorites" element={ 
+            <Route path="/favorites" element={
               <ProtectedRoute>
-                <Favorites /> 
+                <Favorites />
               </ProtectedRoute>
             } />
-            <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
+            <Route path="*" element={<div className="p-8 text-center">404 - Page Not Found</div>} />
           </Routes>
         </main>
+
+        <Footer />
       </AuthProvider>
     </div>
   )
