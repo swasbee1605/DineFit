@@ -5,7 +5,7 @@ import ProfileSetup from '../components/ProfileSetup'
 import { mealLoggingService } from '../services/mealLoggingService'
 
 const Dashboard = () => {
-  const { user, userProfile, hasProfile } = useAuth();
+  const { user, userProfile, hasProfile, isGuest } = useAuth();
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   const [firstTimeProfile, setfirstTimeProfile] = useState(false);
   const [recentMeals, setRecentMeals] = useState([]);
@@ -78,6 +78,14 @@ const Dashboard = () => {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
             Welcome back, {user?.name || 'User'}! 🍽️
           </h1>
+          {isGuest && (
+            <div className="mb-4 inline-flex items-center px-3 py-1 bg-blue-100/80 backdrop-blur-sm border border-blue-200/50 text-blue-700 rounded-full text-sm font-medium">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Guest Mode  
+            </div>
+          )}
           <p className="text-xl sm:text-2xl text-gray-700 mb-4">
             Discover recipes tailored to your taste
           </p>

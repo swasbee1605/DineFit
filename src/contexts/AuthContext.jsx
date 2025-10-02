@@ -277,19 +277,61 @@ export const AuthProvider = ({ children }) => {
             throw error;
         }
     };
+    const guestLogin = async () => {
+        try { 
+            setError(null);
+            
+            const guestUser = {
+                $id: 'guest_' + Date.now(),
+                name: 'Guest User',
+                email: 'guest@dinefit.local',
+                isGuest: true,
+                $createdAt: new Date().toISOString(),
+                $updatedAt: new Date().toISOString()
+            };
+         
+            setUser(guestUser);
+            mealLoggingService.setCurrentUser(guestUser);
+            setError(null);
+           
+            const guestProfile = {
+                $id: 'guest_profile_' + Date.now(),
+                userId: guestUser.$id,
+                allergies: 'None specified',
+                dietaryPreferences: 'None specified',
+                favoriteCuisines: 'All cuisines',
+                cookingTime: '30 minutes',
+                mealsPerDay: '3',
+                isGuest: true,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            setUserProfile(guestProfile);
+           
+            return guestUser;
+        } catch (error) {
+            console.error('Guest login error:', error);
+            setError('Failed to start guest session');
+            throw new Error('Failed to start guest session');
+        }
+    };
+
     const value = {
         user,
         userProfile,
         login,
         logout,
         signup,
+        guestLogin,
         updateProfile,
         getUserProfile,
         deleteProfile,
         loading,
         error,
         isAuthenticated: !!user,
-        hasProfile: !!userProfile
+        hasProfile: !!userProfile,
+        isGuest: user?.isGuest || false
     };
     if (loading) {
         return (
