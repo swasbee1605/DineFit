@@ -85,7 +85,7 @@ const Home = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mt-16 sm:mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 mt-16 sm:mt-20">
             
             <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-emerald-200/50 transform hover:-translate-y-2">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/20 to-teal-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -101,7 +101,7 @@ const Home = () => {
             <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-teal-200/50 transform hover:-translate-y-2">
               <div className="absolute inset-0 bg-gradient-to-br from-teal-100/20 to-cyan-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
-                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">�</div>
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🔍</div>
                 <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Smart Discovery</h3>
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
                   Find new recipes that match your flavor preferences and dietary requirements.
@@ -109,7 +109,7 @@ const Home = () => {
               </div>
             </div>
             
-            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-cyan-200/50 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
+            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-cyan-200/50 transform hover:-translate-y-2">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-100/20 to-blue-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative z-10">
                 <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">❤️</div>
@@ -118,6 +118,17 @@ const Home = () => {
                   Save and organize recipes you love, creating your personalized collection.
                 </p>
               </div>
+            </div>
+
+            <div className="group relative backdrop-blur-sm bg-white/40 p-8 sm:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/30 hover:border-purple-200/50 transform hover:-translate-y-2">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-100/20 to-pink-100/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <Link to={isAuthenticated ? "/meal-planner" : "/login"} className="relative z-10 block">
+                <div className="text-6xl sm:text-7xl mb-6 filter drop-shadow-lg">🗓️</div>
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">Meal Planner</h3>
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                  Plan your meals effortlessly with personalized diet options and flexible scheduling.
+                </p>
+              </Link>
             </div>
           </div>
         </div>
