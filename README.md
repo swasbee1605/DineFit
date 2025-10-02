@@ -24,6 +24,40 @@ DineFit is a smart, user-friendly web application designed to help individuals d
 - **Spoonacular API** - Premium recipe database with dietary filtering
 - **NodeCache** - In-memory caching for performance optimization
 
+## 🚀 Getting Started
+
+Follow these steps to run DineFit on your local machine:
+
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/imkrishnasarathi/DineFit.git
+   ```
+
+2. **Navigate into the project folder**
+   ```sh
+   cd DineFit
+   ```
+
+3. **Install dependencies**
+   ```sh
+   npm install
+   ```
+
+4. **Start the development server**
+   ```sh
+   npm run dev
+   ```
+
+After running the command, you should see output similar to:
+
+```
+  VITE v7.x.x  ready in xxxx ms
+
+  ➜  Local:   http://localhost:5173/
+```
+
+Now open your browser at [http://localhost:5173/](http://localhost:5173/) to view the app.
+
 ## 🔄 Development Roadmap
 
 ### ✅ **Completed**
