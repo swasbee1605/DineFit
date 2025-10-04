@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from "../components/ui/button";
+import ImageUpload from "../components/ImageUpload";
 import { Card, CardContent } from "../components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select";
 import { Download, Save, ChevronDown } from "lucide-react";
@@ -214,6 +215,28 @@ const dishes = {
 
 export default function MealPlanner() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mealImages, setMealImages] = useState({ breakfast: null, lunch: null, dinner: null, snacks: null });
+  const [isImageUploadOpen, setIsImageUploadOpen] = useState(false);
+  const [selectedMealType, setSelectedMealType] = useState(null);
+  const [activePlanId, setActivePlanId] = useState(
+  localStorage.getItem('activePlanId') || null
+);
+
+  // ...existing code...
+  const handleOpenImageUpload = (mealType) => {
+    setSelectedMealType(mealType);
+    setIsImageUploadOpen(true);
+  };
+
+  const handleImageSelect = (imageData) => {
+    if (selectedMealType) {
+      setMealImages((prev) => ({
+        ...prev,
+        [selectedMealType]: imageData,
+      }));
+      setIsImageUploadOpen(false);
+    }
+  };
   const [diet, setDiet] = useState("");
   const [mealPlan, setMealPlan] = useState({ breakfast: "", lunch: "", dinner: "", snacks: "" });
   const [savedPlans, setSavedPlans] = useState(
@@ -323,12 +346,19 @@ export default function MealPlanner() {
       date: new Date().toISOString(),
       diet,
       plan: mealPlan,
+      images: mealImages,
       id: Date.now()
     };
     const updatedPlans = [...savedPlans, newPlan];
     setSavedPlans(updatedPlans);
     localStorage.setItem('savedMealPlans', JSON.stringify(updatedPlans));
     alert('Meal plan saved successfully!');
+
+      // Ask if user wants to set this plan as active
+    if (window.confirm('Do you want to set this plan as your active plan?')) {
+      setActivePlanId(newPlan.id);
+      localStorage.setItem('activePlanId', newPlan.id);
+    }
   };
 
   const deletePlan = (planId) => {
@@ -336,6 +366,11 @@ export default function MealPlanner() {
       const updatedPlans = savedPlans.filter(plan => plan.id !== planId);
       setSavedPlans(updatedPlans);
       localStorage.setItem('savedMealPlans', JSON.stringify(updatedPlans));
+
+      if (activePlanId === planId) {
+        setActivePlanId(null);
+        localStorage.removeItem('activePlanId');
+      }
     }
   };
 
@@ -382,6 +417,50 @@ Snacks: ${mealPlan.snacks}
         </div>
 
         <div className="space-y-8">
+{/* -------- Active Plan Display (Top) -------- */}
+{activePlanId && (() => {
+  const activePlan = savedPlans.find(p => p.id === Number(activePlanId));
+  if (!activePlan) return null;
+
+  return (
+    <div className="mb-8 p-6 bg-white/90 border-4 border-emerald-500 rounded-3xl shadow-2xl">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-emerald-700">
+          🌟 Active Meal Plan
+        </h2>
+        <span className="px-3 py-1 text-sm font-semibold text-white bg-emerald-600 rounded-full">
+          Active
+        </span>
+      </div>
+
+      <p className="text-gray-600 mb-6">Diet Type: {activePlan.diet}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {Object.entries(activePlan.plan).map(([mealType, dish]) => (
+          <div key={mealType} className="bg-emerald-50/80 rounded-xl p-6 flex flex-col items-center shadow-lg hover:shadow-2xl transition-shadow">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-2xl mb-3">
+              {mealType === 'breakfast' && '🌅'}
+              {mealType === 'lunch' && '🌞'}
+              {mealType === 'dinner' && '🌙'}
+              {mealType === 'snacks' && '🍎'}
+            </div>
+            <h4 className="font-semibold capitalize text-emerald-800 mb-2">{mealType}</h4>
+            <p className="text-gray-700 text-center mb-2">{dish}</p>
+            {activePlan.images && activePlan.images[mealType] && (
+              <img
+                src={activePlan.images[mealType]}
+                alt={dish || mealType}
+                className="w-full h-32 object-cover rounded-lg shadow-md"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+})()}
+        {/* -------- End Active Plan Display -------- */}
+         {/* Collapsible Recent Plans */}
           <Collapsible 
             open={isOpen}
             onOpenChange={setIsOpen}
@@ -424,6 +503,7 @@ Snacks: ${mealPlan.snacks}
             </div>
 
             <CollapsibleContent className="space-y-4 animate-in slide-in-from-top-4 duration-300">
+              
               <div className="grid grid-cols-1 gap-6 mb-4">
                 {savedPlans
                   .filter(plan => !searchDate || plan.date.includes(searchDate))
@@ -453,6 +533,7 @@ Snacks: ${mealPlan.snacks}
                             onClick={() => {
                               setDiet(plan.diet);
                               setMealPlan(plan.plan);
+                              setMealImages(plan.images || { breakfast: null, lunch: null, dinner: null, snacks: null });
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                             className="text-emerald-600 hover:text-emerald-700"
@@ -475,6 +556,13 @@ Snacks: ${mealPlan.snacks}
                           <div key={mealType} className="bg-emerald-50/50 rounded-lg p-4">
                             <h4 className="font-medium capitalize text-emerald-800 mb-2">{mealType}</h4>
                             <p className="text-gray-700">{dish}</p>
+                            {plan.images && plan.images[mealType] && (
+                              <img
+                                src={plan.images[mealType]}
+                                alt={dish || mealType}
+                                className="w-full h-32 object-cover rounded-lg mt-2 shadow"
+                              />
+                            )}
                           </div>
                         ))}
                       </div>
@@ -617,6 +705,23 @@ Snacks: ${mealPlan.snacks}
                           </div>
                         </div>
                         <p className="text-gray-700 mb-4">{dish}</p>
+                        {mealImages[mealType] && (
+                          <img
+                            src={mealImages[mealType]}
+                            alt={dish || mealType}
+                            className="w-full h-32 object-cover rounded-lg mb-2 shadow"
+                          />
+                        )}
+                        <div className="flex flex-col gap-2 mb-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleOpenImageUpload(mealType)}
+                            className="w-full hover:bg-emerald-50"
+                          >
+                            Upload Image / Camera
+                          </Button>
+                        </div>
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -650,9 +755,22 @@ Snacks: ${mealPlan.snacks}
                 </div>
               </>
             )}
+            {isImageUploadOpen && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-xl p-6 max-w-md w-full">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Add Image for {selectedMealType}
+                  </h3>
+                  <ImageUpload onImageSelect={handleImageSelect} />
+                  <div className="flex justify-end mt-4">
+                    <Button variant="outline" onClick={() => setIsImageUploadOpen(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-
-
         </div>
       </div>
     </div>
