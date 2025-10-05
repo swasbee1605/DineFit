@@ -4,11 +4,11 @@ import { advancedRecipeService } from '../services/advancedRecipeService';
 import RecipeCard from '../components/RecipeCard';
 import RecipeModal from '../components/RecipeModal';
 import { Link } from 'react-router-dom';
-// 1. Import Appwrite tools
+// 1. Make sure these imports are at the top
 import { databases } from '../appwriteClient';
 import { ID } from 'appwrite';
 
-// --- All the existing filter functions remain unchanged ---
+// --- All filter functions remain the same ---
 const filterByAllergies = (recipes, allergies) => {
   if (!allergies || allergies === 'None specified') return recipes;
   const allergyList = allergies.toLowerCase().split(',').map(a => a.trim());
@@ -105,7 +105,7 @@ const filterByCuisinePreferences = (recipes, favoriteCuisines) => {
 
 
 const Recipes = () => {
-  const { user, userProfile } = useAuth(); // Get the logged in user
+  const { user, userProfile } = useAuth();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -188,7 +188,7 @@ const Recipes = () => {
     }
   };
 
-  // --- 2. UPDATE THE handleRating FUNCTION ---
+  // --- 2. THIS IS THE COMPLETE AND CORRECT FUNCTION TO SAVE THE RATING ---
   const handleRating = async (ratingValue) => {
     if (!user) {
         alert('You must be logged in to rate a recipe.');
@@ -196,35 +196,26 @@ const Recipes = () => {
     }
     if (!selectedRecipe) return;
 
-    // This is the data we will save to the database
     const ratingData = {
         userId: user.$id,
-        recipeId: selectedRecipe.id.toString(), // Ensure recipeId is a string
+        recipeId: selectedRecipe.id.toString(),
         ratingValue: ratingValue,
         ratedAt: new Date().toISOString(),
     };
 
     try {
-        const promise = databases.createDocument(
+        await databases.createDocument(
             import.meta.env.VITE_APPWRITE_DATABASE_ID,
             import.meta.env.VITE_APPWRITE_RATINGS_COLLECTION_ID,
             ID.unique(),
             ratingData
         );
-
-        promise.then(function (response) {
-            console.log(response); // Success
-            alert('Thank you! Your rating has been saved.');
-        }, function (error) {
-            console.error(error); // Failure
-            alert('Error: Could not save your rating.');
-        });
-
+        alert('Thank you! Your rating has been saved.');
     } catch (error) {
-        console.error('Error creating rating document:', error);
-        alert('An unexpected error occurred while saving your rating.');
+        console.error('Error saving rating:', error);
+        alert('Error: Could not save your rating. Please check the console for details.');
     } finally {
-        setShowModal(false); // Close the modal
+        setShowModal(false);
     }
   };
 
@@ -349,4 +340,6 @@ const Recipes = () => {
     </div>
   );
 };
+
 export default Recipes;
+
