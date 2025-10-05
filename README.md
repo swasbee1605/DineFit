@@ -1,5 +1,5 @@
 ## 🎃 Hacktoberfest 2025
-This repository is participating in **Hacktoberfest 2025**!  
+This repository is participating in **Hacktoberfest 2025**! Don't forget to Star ⭐️ the Repo and show your support!
 
 # 🍽️ DineFit
 

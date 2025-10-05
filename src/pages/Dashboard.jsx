@@ -76,7 +76,7 @@ const Dashboard = () => {
             </Link>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
-            Welcome back, {user?.name || 'User'}! 🍽️
+            Welcome back, {user?.name || 'User'}! <span className="text-white">🍽️</span>
           </h1>
           {isGuest && (
             <div className="mb-4 inline-flex items-center px-3 py-1 bg-blue-100/80 backdrop-blur-sm border border-blue-200/50 text-blue-700 rounded-full text-sm font-medium">
@@ -149,22 +149,26 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="backdrop-blur-sm bg-white/40 p-6 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+          <div className="backdrop-blur-sm bg-white/40 p-6 sm:p-8 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-800">Dietary Preferences</h3>
-              <span className="text-2xl">🥗</span>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Dietary Preferences</h3>
+              <span className="text-3xl">🥗</span>
             </div>
-            <p className="text-lg font-semibold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{userPreferences.dietaryPreferences}</p>
-            <p className="text-sm text-gray-600 mt-2">Recipes that match your lifestyle</p>
+            <div className="space-y-2">
+              <p className="text-lg font-semibold text-gray-800">{userPreferences.dietaryPreferences}</p>
+              <p className="text-sm text-gray-600">Recipes that match your lifestyle</p>
+            </div>
           </div>
           
-          <div className="backdrop-blur-sm bg-white/40 p-6 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+          <div className="backdrop-blur-sm bg-white/40 p-6 sm:p-8 rounded-3xl shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-800">Cooking Time</h3>
-              <span className="text-2xl">⏰</span>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Cooking Time</h3>
+              <span className="text-3xl">⏰</span>
             </div>
-            <p className="text-lg font-semibold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">{userPreferences.cookingTime}</p>
-            <p className="text-sm text-gray-600 mt-2">Recipes that fit your schedule</p>
+            <div className="space-y-2">
+              <p className="text-lg font-semibold text-gray-800">{userPreferences.cookingTime}</p>
+              <p className="text-sm text-gray-600">Recipes that fit your schedule</p>
+            </div>
           </div>
         </div>
         

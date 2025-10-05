@@ -12,7 +12,9 @@ import Recipes from './pages/Recipes'
 import Favorites from './pages/Favorites'
 import Success from './pages/Success'
 import Failure from './pages/Failure'
+import MealPlanner from './pages/MealPlanner'   
 import './index.css'
+
 function App() {
   console.log('App component rendering...');
   return (
@@ -53,7 +55,16 @@ function App() {
                 <Favorites />
               </ProtectedRoute>
             } />
-            <Route path="*" element={<div className="p-8 text-center">404 - Page Not Found</div>} />
+ meal-added-branch
+            <Route path="/meal-planner" element={ 
+              <ProtectedRoute>
+                <MealPlanner /> 
+              </ProtectedRoute>
+            } />  
+
+            <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
+
+            main
           </Routes>
         </main>
 
