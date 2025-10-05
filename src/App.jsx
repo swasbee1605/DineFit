@@ -29,7 +29,6 @@ function App() {
             <Route path="/success" element={<Success />} />
             <Route path="/failure" element={<Failure />} />
 
-            {/* Protected routes */}
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
