@@ -10,6 +10,8 @@ import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
 import Recipes from './pages/Recipes'
 import Favorites from './pages/Favorites'
+import Success from './pages/Success'
+import Failure from './pages/Failure'
 import MealPlanner from './pages/MealPlanner'   
 import './index.css'
 
@@ -21,10 +23,19 @@ function App() {
         <Navbar />
         <main>
           <Routes>
+
+            <Route path="/" element={ <Home /> } />
+            <Route path="/signup" element={ <Signup /> } />
+            <Route path="/login" element={ <Login /> } />
+            <Route path="/success" element={ <Success /> } />
+            <Route path="/failure" element={ <Failure /> } />
+            <Route path="/dashboard" element={ 
+
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={
+
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
