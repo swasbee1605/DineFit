@@ -13,6 +13,7 @@ import Favorites from './pages/Favorites'
 import Success from './pages/Success'
 import Failure from './pages/Failure'
 import MealPlanner from './pages/MealPlanner'   
+import MealHistory from './pages/MealHistory'
 import './index.css'
 
 function App() {
@@ -49,12 +50,17 @@ function App() {
                 <Favorites />
               </ProtectedRoute>
             } />
+            <Route path="/meal-history" element={ 
+              <ProtectedRoute>
+                <MealHistory /> 
+              </ProtectedRoute>
+            } />
             <Route path="/meal-planner" element={
               <ProtectedRoute>
                 <MealPlanner />
               </ProtectedRoute>
             } />
-
+              
             <Route path="*" element={<div className="p-8 text-center">404 - Page Not Found</div>} />
           </Routes>
         </main>
