@@ -10,8 +10,12 @@ import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
 import Recipes from './pages/Recipes'
 import Favorites from './pages/Favorites'
-import './index.css'
+import Success from './pages/Success'
+import Failure from './pages/Failure'
+import MealPlanner from './pages/MealPlanner'   
 import MealHistory from './pages/MealHistory'
+import './index.css'
+
 function App() {
   console.log('App component rendering...');
   return (
@@ -23,6 +27,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/failure" element={<Failure />} />
+
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
@@ -48,13 +55,19 @@ function App() {
                 <MealHistory /> 
               </ProtectedRoute>
             } />
-            <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
+            <Route path="/meal-planner" element={
+              <ProtectedRoute>
+                <MealPlanner />
+              </ProtectedRoute>
+            } />
+              
+            <Route path="*" element={<div className="p-8 text-center">404 - Page Not Found</div>} />
           </Routes>
         </main>
-
         <Footer />
       </AuthProvider>
     </div>
   )
 }
+
 export default App
