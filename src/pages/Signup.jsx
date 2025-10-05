@@ -65,10 +65,10 @@ const Signup = () => {
 
   const handleGoogleOAuth = () => {
     console.log("clicked")
-       account.createOAuth2Session(
+    account.createOAuth2Session(
       "google",
-      "http://localhost:5173/success",  // TODO: Replace with your deployed URL in production
-      "http://localhost:5173/failure"
+      `${process.env.BASE_URL}/success`,
+      `${process.env.BASE_URL}/failure`,
     )
   }
 
