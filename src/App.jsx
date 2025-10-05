@@ -23,19 +23,14 @@ function App() {
         <Navbar />
         <main>
           <Routes>
-
-            <Route path="/" element={ <Home /> } />
-            <Route path="/signup" element={ <Signup /> } />
-            <Route path="/login" element={ <Login /> } />
-            <Route path="/success" element={ <Success /> } />
-            <Route path="/failure" element={ <Failure /> } />
-            <Route path="/dashboard" element={ 
-
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={
+            <Route path="/success" element={<Success />} />
+            <Route path="/failure" element={<Failure />} />
 
+            {/* Protected routes */}
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
@@ -55,22 +50,19 @@ function App() {
                 <Favorites />
               </ProtectedRoute>
             } />
- meal-added-branch
-            <Route path="/meal-planner" element={ 
+            <Route path="/meal-planner" element={
               <ProtectedRoute>
-                <MealPlanner /> 
+                <MealPlanner />
               </ProtectedRoute>
-            } />  
+            } />
 
-            <Route path="*" element={ <div className="p-8 text-center">404 - Page Not Found</div> } />
-
-            main
+            <Route path="*" element={<div className="p-8 text-center">404 - Page Not Found</div>} />
           </Routes>
         </main>
-
         <Footer />
       </AuthProvider>
     </div>
   )
 }
+
 export default App
