@@ -15,8 +15,8 @@ import Failure from "./pages/Failure";
 import MealPlanner from "./pages/MealPlanner";
 import MealHistory from "./pages/MealHistory";
 import About from "./pages/About";
-import "./index.css";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import "./index.css";
 
 function App() {
   console.log("App component rendering...");
