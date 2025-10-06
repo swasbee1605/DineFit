@@ -4,25 +4,6 @@ import RecipeModal from "../components/RecipeModal";
 import { Link } from "react-router-dom";
 
 export default function About() {
-  const [allMeals, setAllMeals] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-
-  const loadMealData = async () => {
-    const meals = await mealLoggingService.getAllMealLogs();
-    setAllMeals(meals);
-  };
-
-  const handleModal = (meal) => {
-    console.log(meal);
-    setShowModal(true);
-    setSelectedRecipe(meal);
-  };
-
-  useEffect(() => {
-    loadMealData();
-  }, []);
-
   return (
     <>
       <div className="flex flex-row items-center justify-center mt-5">
