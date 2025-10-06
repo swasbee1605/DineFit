@@ -17,7 +17,7 @@ export default function About() {
           <div className="text-center mb-8 backdrop-blur-sm bg-white/30 rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-3">
               About Us
-              <span className="text-white">🍽️</span>
+              <span className="text-white"> 🍽️</span>
             </h1>
 
             <p className="py-5 text-xs sm:text-xl text-gray-700 mb-4 items-start px-5">

@@ -44,12 +44,12 @@ export default function PrivacyPolicy() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong>Personal Information:</strong> name, age, email
+                  <strong>Personal Information:</strong> Name, age, email
                   address, and dietary preferences (likes/dislikes, allergies,
                   dietary restrictions).
                 </li>
                 <li>
-                  <strong>Usage Information:</strong> interactions with the app
+                  <strong>Usage Information:</strong> Interactions with the app
                   (recipes viewed, saved, search queries) to personalize
                   recommendations.
                 </li>
@@ -98,17 +98,17 @@ export default function PrivacyPolicy() {
               </p>
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong>Trusted Service Providers:</strong> vendors who help
+                  <strong>Trusted Service Providers:</strong> Vendors who help
                   run the site (hosting, analytics, recipe data providers). They
                   access data only to perform services for us and must follow
                   our instructions and appropriate safeguards.
                 </li>
                 <li>
-                  <strong>Legal Requirements:</strong> when required by law or
+                  <strong>Legal Requirements:</strong> When required by law or
                   to respond to lawful requests from public authorities.
                 </li>
                 <li>
-                  <strong>Business Transfers:</strong> in connection with a
+                  <strong>Business Transfers:</strong> In connection with a
                   merger, acquisition, or sale of assets — we will notify users
                   and follow legal requirements.
                 </li>
