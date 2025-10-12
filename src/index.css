@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Bebas+Neue&family=Bitcount+Prop+Single+Ink:wght@100..900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @layer base {
   :root {
@@ -214,4 +216,11 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.font-arimo{
+     font-family: "Arimo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
