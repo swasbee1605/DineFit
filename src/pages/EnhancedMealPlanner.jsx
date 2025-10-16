@@ -22,31 +22,202 @@ const dietaryOptions = ["Vegetarian", "Vegan", "Keto", "Paleo", "Balanced"];
 
 const dishes = {
   Vegetarian: [
-    "Overnight Oats with Berries", "Greek Yogurt Parfait", "Spinach and Mushroom Omelette",
-    "Whole Grain Pancakes with Fruit", "Quinoa Buddha Bowl", "Mediterranean Pasta Salad",
-    "Grilled Vegetable Wrap", "Lentil and Spinach Curry", "Eggplant Parmesan",
-    "Mushroom Risotto", "Vegetable Lasagna", "Stuffed Bell Peppers"
+    // Breakfast
+    "Overnight Oats with Berries",
+    "Greek Yogurt Parfait",
+    "Spinach and Mushroom Omelette",
+    "Whole Grain Pancakes with Fruit",
+    "Vegetable Upma",
+    "Chickpea Flour Pancakes",
+    "Cottage Cheese Toast",
+    "Banana Oatmeal Smoothie Bowl",
+    "Masala Dosa with Coconut Chutney",
+    "Breakfast Burrito with Scrambled Eggs",
+    "Ricotta and Honey Toast",
+    "Apple Cinnamon Waffles",
+    "Peanut Butter and Banana Smoothie",
+    "Mixed Berry Chia Pudding",
+    "English Muffin with Avocado",
+    "Multigrain Porridge with Nuts",
+    // Lunch
+    "Quinoa Buddha Bowl",
+    "Mediterranean Pasta Salad",
+    "Grilled Vegetable Wrap",
+    "Lentil and Spinach Curry",
+    "Caprese Sandwich",
+    "Vegetable Stir-Fry with Tofu",
+    "Black Bean Burrito Bowl",
+    "Roasted Vegetable Quiche",
+    // Dinner
+    "Eggplant Parmesan",
+    "Mushroom Risotto",
+    "Vegetable Lasagna",
+    "Stuffed Bell Peppers",
+    "Cauliflower Mac and Cheese",
+    "Portobello Mushroom Burger",
+    "Vegetable Biryani",
+    "Spinach and Ricotta Cannelloni",
+    // Snacks
+    "Trail Mix with Nuts and Dried Fruit",
+    "Hummus with Carrot Sticks",
+    "Greek Yogurt with Honey",
+    "Apple Slices with Peanut Butter",
+    "Cheese and Crackers",
+    "Roasted Chickpeas",
+    "Fruit and Nut Energy Balls",
+    "Vegetable Spring Rolls",
   ],
   Vegan: [
-    "Chia Seed Pudding", "Tofu Scramble", "Avocado Toast with Seeds",
-    "Almond Milk Smoothie Bowl", "Buddha Bowl with Tahini Dressing",
-    "Chickpea Salad Sandwich", "Lentil and Vegetable Soup", "Quinoa Stuffed Sweet Potato"
+    // Breakfast
+    "Chia Seed Pudding",
+    "Tofu Scramble",
+    "Avocado Toast with Seeds",
+    "Almond Milk Smoothie Bowl",
+    "Vegan Banana Pancakes",
+    "Quinoa Porridge with Berries",
+    "Coconut Yogurt Parfait",
+    "Overnight Oats with Plant Milk",
+    // Lunch
+    "Buddha Bowl with Tahini Dressing",
+    "Chickpea Salad Sandwich",
+    "Lentil and Vegetable Soup",
+    "Quinoa Stuffed Sweet Potato",
+    "Tempeh BLT Sandwich",
+    "Black Bean and Corn Tacos",
+    "Mediterranean Couscous Bowl",
+    "Vegan Pesto Pasta",
+    // Dinner
+    "Mushroom and Walnut 'Meatballs'",
+    "Cauliflower and Chickpea Curry",
+    "Vegan Shepherd's Pie",
+    "Stir-Fried Tofu with Vegetables",
+    "Black Bean Burgers",
+    "Lentil Bolognese",
+    "Roasted Vegetable Pizza",
+    "Jackfruit Pulled 'Pork'",
+    // Snacks
+    "Mixed Berry Smoothie",
+    "Guacamole with Tortilla Chips",
+    "Roasted Nuts and Seeds",
+    "Fruit Leather",
+    "Vegetable Sushi Rolls",
+    "Kale Chips",
+    "Energy Balls",
+    "Dried Fruit Mix",
   ],
   Keto: [
-    "Bacon and Eggs", "Keto Coffee with MCT Oil", "Cream Cheese Pancakes",
-    "Avocado and Egg Bowl", "Tuna Salad Lettuce Wraps", "Caesar Salad with Chicken",
-    "Butter Chicken", "Grilled Ribeye Steak", "Baked Salmon with Herbs"
+    // Breakfast
+    "Bacon and Eggs",
+    "Keto Coffee with MCT Oil",
+    "Cream Cheese Pancakes",
+    "Avocado and Egg Bowl",
+    "Sausage and Cheese Frittata",
+    "Coconut Flour Waffles",
+    "Ham and Cheese Omelette",
+    "Keto Breakfast Sandwich",
+    // Lunch
+    "Tuna Salad Lettuce Wraps",
+    "Caesar Salad with Chicken",
+    "Keto Club Sandwich",
+    "Zucchini Noodles with Meatballs",
+    "Buffalo Chicken Wings",
+    "Salmon Avocado Bowl",
+    "Egg Salad in Bell Peppers",
+    "Greek Salad with Feta",
+    // Dinner
+    "Butter Chicken",
+    "Grilled Ribeye Steak",
+    "Baked Salmon with Herbs",
+    "Chicken Alfredo with Zoodles",
+    "Beef and Broccoli Stir-Fry",
+    "Pork Chops with Vegetables",
+    "Cauliflower Mac and Cheese",
+    "Keto Pizza with Meat Toppings",
+    // Snacks
+    "String Cheese",
+    "Hard-Boiled Eggs",
+    "Pepperoni Slices",
+    "Almonds and Cheese Cubes",
+    "Pork Rinds",
+    "Fat Bombs",
+    "Beef Jerky",
+    "Cucumber with Ranch Dip",
   ],
   Paleo: [
-    "Sweet Potato Hash with Eggs", "Grain-Free Granola", "Turkey and Avocado Bowl",
-    "Banana Almond Pancakes", "Chicken and Avocado Lettuce Wraps", "Tuna Nicoise Salad",
-    "Grass-Fed Beef Burger", "Roasted Chicken with Herbs"
+    // Breakfast
+    "Sweet Potato Hash with Eggs",
+    "Grain-Free Granola",
+    "Turkey and Avocado Bowl",
+    "Banana Almond Pancakes",
+    "Paleo Breakfast Muffins",
+    "Smoked Salmon with Vegetables",
+    "Fruit and Nut Bowl",
+    "Paleo Breakfast Burrito Bowl",
+    // Lunch
+    "Chicken and Avocado Lettuce Wraps",
+    "Tuna Nicoise Salad",
+    "Turkey and Sweet Potato Chili",
+    "Grilled Chicken Caesar Salad",
+    "Zucchini Noodle Stir-Fry",
+    "Coconut Shrimp",
+    "Beef and Vegetable Skewers",
+    "Mediterranean Fish",
+    // Dinner
+    "Grass-Fed Beef Burger",
+    "Roasted Chicken with Herbs",
+    "Grilled Salmon with Asparagus",
+    "Bison Meatballs",
+    "Lamb Chops with Mint",
+    "Turkey Stuffed Peppers",
+    "Paleo Beef Stew",
+    "Coconut Curry Chicken",
+    // Snacks
+    "Mixed Nuts",
+    "Apple with Almond Butter",
+    "Beef or Turkey Jerky",
+    "Dried Fruit and Nuts",
+    "Paleo Energy Balls",
+    "Sweet Potato Chips",
+    "Fresh Fruit Medley",
+    "Raw Vegetable Platter",
   ],
   Balanced: [
-    "Whole Grain Toast with Eggs", "Steel Cut Oats with Fruit", "Protein Smoothie Bowl",
-    "Whole Wheat Bagel with Cream Cheese", "Turkey and Avocado Sandwich",
-    "Mixed Green Salad with Grilled Chicken", "Grilled Fish with Brown Rice",
-    "Lean Beef Stir-Fry", "Chicken Breast with Sweet Potato"
+    // Breakfast
+    "Whole Grain Toast with Eggs",
+    "Steel Cut Oats with Fruit",
+    "Protein Smoothie Bowl",
+    "Whole Wheat Bagel with Cream Cheese",
+    "Breakfast Burrito",
+    "Yogurt and Granola Parfait",
+    "Breakfast Quinoa Bowl",
+    "Fruit and Nut Oatmeal",
+    // Lunch
+    "Turkey and Avocado Sandwich",
+    "Mixed Green Salad with Grilled Chicken",
+    "Quinoa Bowl with Roasted Vegetables",
+    "Tuna Wrap with Whole Grain Tortilla",
+    "Brown Rice Bowl with Tofu",
+    "Mediterranean Chicken Pita",
+    "Veggie and Hummus Sandwich",
+    "Lentil and Rice Bowl",
+    // Dinner
+    "Grilled Fish with Brown Rice",
+    "Lean Beef Stir-Fry",
+    "Chicken Breast with Sweet Potato",
+    "Turkey Meatballs with Pasta",
+    "Baked Salmon with Quinoa",
+    "Shrimp and Vegetable Skewers",
+    "Lean Pork Tenderloin",
+    "White Fish with Couscous",
+    // Snacks
+    "Greek Yogurt with Berries",
+    "Whole Grain Crackers with Cheese",
+    "Mixed Nuts and Dried Fruit",
+    "Apple with Peanut Butter",
+    "Hummus with Pita Chips",
+    "Protein Bar",
+    "Fruit Smoothie",
+    "Popcorn with Nuts",
   ],
 };
 
@@ -265,8 +436,11 @@ export default function EnhancedMealPlanner() {
       const updatedPlans = savedPlans.filter((plan) => plan.id !== planId);
       setSavedPlans(updatedPlans);
       localStorage.setItem("savedMealPlans", JSON.stringify(updatedPlans));
+      
+      // Invalidate cache to ensure deleted plan doesn't reappear
+      enhancedMealPlannerService.clearCache();
 
-      if (activePlanId === planId) {
+      if (Number(activePlanId) === planId) {
         setActivePlanId(null);
         localStorage.removeItem("activePlanId");
       }
@@ -281,6 +455,10 @@ export default function EnhancedMealPlanner() {
     ) {
       setSavedPlans([]);
       localStorage.setItem("savedMealPlans", "[]");
+      setActivePlanId(null);
+      localStorage.removeItem("activePlanId");
+      // Clear the service cache to prevent old plans from reappearing
+      enhancedMealPlannerService.clearCache();
     }
   };
 
@@ -447,7 +625,7 @@ export default function EnhancedMealPlanner() {
                             Diet Type: {plan.diet}
                           </p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                           <Button
                             variant="outline"
                             size="sm"
@@ -462,11 +640,35 @@ export default function EnhancedMealPlanner() {
                                   snacks: null,
                                 }
                               );
-                              window.scrollTo({ top: 0, behavior: "smooth" });
+                              // Scroll to the create plan section
+                              const section = document.getElementById('create-plan-section');
+                              if (section) {
+                                section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              }
                             }}
                             className="text-emerald-600 hover:text-emerald-700"
                           >
                             Restore Plan
+                          </Button>
+                          <Button
+                            variant={Number(activePlanId) === plan.id ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => {
+                              if (Number(activePlanId) === plan.id) {
+                                setActivePlanId(null);
+                                localStorage.removeItem("activePlanId");
+                              } else {
+                                const newActivePlanId = String(plan.id);
+                                setActivePlanId(newActivePlanId);
+                                localStorage.setItem("activePlanId", newActivePlanId);
+                              }
+                            }}
+                            className={Number(activePlanId) === plan.id 
+                              ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+                              : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            }
+                          >
+                            {Number(activePlanId) === plan.id ? "Active ✓" : "Set Active"}
                           </Button>
                           <Button
                             variant="outline"
@@ -525,7 +727,7 @@ export default function EnhancedMealPlanner() {
           </Collapsible>
 
           {/* Generate New Plan Section */}
-          <div className="backdrop-blur-sm bg-white/60 rounded-3xl p-8 shadow-xl border border-white/50">
+          <div id="create-plan-section" className="backdrop-blur-sm bg-white/60 rounded-3xl p-8 shadow-xl border border-white/50">
             <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-6">
               Create New Meal Plan
             </h2>

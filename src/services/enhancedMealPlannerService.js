@@ -535,6 +535,9 @@ class EnhancedMealPlannerService {
       plans.push(newPlan);
       localStorage.setItem('savedMealPlans', JSON.stringify(plans));
       
+      // Invalidate the cache so it reads fresh data next time
+      this.memoryCache.del('all_saved_plans');
+      
       // Cache the individual plan
       const cacheKey = `saved_plan_${newPlan.id}`;
       this.setCache(cacheKey, newPlan, 86400); // Cache for 24 hours
