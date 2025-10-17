@@ -315,6 +315,10 @@ export default function MealPlanner() {
       ...prev,
       [mealType]: getSuggestions(value, mealType),
     }));
+    setMealPlan(prev => ({
+      ...prev,
+      [mealType]: value
+    }));
   };
 
   const handleSelectSuggestion = (mealType, dish) => {
