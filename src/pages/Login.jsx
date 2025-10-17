@@ -91,10 +91,11 @@ const Login = () => {
 
     const handleGoogleOAuth = () => {
         console.log("clicked")
+        const origin = window.location.origin;
         account.createOAuth2Session(
             "google",
-            `${process.env.BASE_URL}/success`,
-            `${process.env.BASE_URL}/failure`,
+            `${origin}/success`,
+            `${origin}/failure`,
         )
     }
 
