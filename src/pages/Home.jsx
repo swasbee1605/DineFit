@@ -9,7 +9,6 @@ import third from "../assets/third.png";
 import fourth from "../assets/fourth.png";
 import fifth from "../assets/fifth.png";
 import sixth from "../assets/sixth.png";
-
 import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { Link } from 'react-router-dom';
