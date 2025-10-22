@@ -17,6 +17,7 @@ import MealHistory from "./pages/MealHistory";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import "./index.css";
+import "./components/BackToTopButton.jsx";
 
 function App() {
   console.log("App component rendering...");
@@ -95,6 +96,16 @@ function App() {
         </main>
         <Footer />
       </AuthProvider>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>Scroll down to see the Back to Top button</h1>
+      <div style={{ height: "2000px" }}></div>
+      <BackToTopButton />
     </div>
   );
 }
