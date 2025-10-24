@@ -191,6 +191,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
+            
               <NavLink to="/" className={({ isActive }) => `${baseLink} ${activeLink(isActive)}`}>
                 Home
               </NavLink>
