@@ -124,6 +124,9 @@ const Navbar = () => {
               )}
             </>
           )}
+          <button onClick={toggleTheme} aria-label="Toggle theme" className="px-2 py-1 rounded">
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
         </div>
 
         {/* Hamburger Button (Mobile) */}

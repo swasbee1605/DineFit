@@ -12,11 +12,12 @@ import Recipes from "./pages/Recipes";
 import Favorites from "./pages/Favorites";
 import Success from "./pages/Success";
 import Failure from "./pages/Failure";
-import MealPlanner from "./pages/MealPlanner";
+import MealPlanner from "./pages/EnhancedMealPlanner";
 import MealHistory from "./pages/MealHistory";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import "./index.css";
+// Removed unused side-effect import of BackToTopButton (duplicate App defined later caused confusion)
 
 function App() {
   console.log("App component rendering...");
