@@ -3,9 +3,10 @@
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
+
 import hero from "../assets/hero.jpg";
 import search from "../assets/search.png";
-import second from "../assets/search.png";
+import second from "../assets/second.png";
 import third from "../assets/third.png";
 import fourth from "../assets/fourth.png";
 import fifth from "../assets/fifth.png";
@@ -112,7 +113,7 @@ const Home = () => {
             <div className="w-full max-w-[400px] p-4 rounded-2xl shadow-2xl">
               <img className="w-full block rounded-xl" src={hero} alt="hero" />
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -153,3 +154,4 @@ const Home = () => {
 export default Home;
 
 
+export default Home;
